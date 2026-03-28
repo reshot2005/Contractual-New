@@ -10,6 +10,7 @@ import {
   resetAdminLoginAttempts,
 } from "@/lib/workspace-admin/rate-limit"
 import { prisma } from "@/lib/prisma"
+import { getAdminCreds } from "@/lib/workspace-admin/config"
 
 const bodySchema = z.object({
   email: z.string().email(),
@@ -36,8 +37,11 @@ export async function POST(req: NextRequest) {
     return jsonErr("Too many attempts. Try again later.", 429)
   }
 
-  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim()
-  const hash = process.env.ADMIN_PASSWORD_HASH
+  const { email: adminEmailRaw, hash } = getAdminCreds()
+  const adminEmail = adminEmailRaw?.toLowerCase().trim()
+
+  console.log("[workspace-admin/login] Using creds from:", adminEmail ? "config/env" : "missing")
+
   if (!adminEmail || !hash) {
     console.error("[workspace-admin/login] ADMIN_EMAIL or ADMIN_PASSWORD_HASH missing")
     return jsonErr("Admin login not configured", 503)
