@@ -1,5 +1,6 @@
+"use client"
 import { useParams } from "next/navigation"
-import { ContractDetailPage } from "@/src/views/ContractDetail"
+import { ContractDetailPage } from "@/views/ContractDetail"
 
 export default function ContractDetailRoute() {
   const { id } = useParams<{ id: string }>()

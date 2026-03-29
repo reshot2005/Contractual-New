@@ -1,0 +1,190 @@
+﻿
+> my-project@0.1.0 build
+> next build
+
+node.exe : ΓÜá `eslint` 
+configuration in 
+next.config.mjs is no 
+longer supported. See 
+more info here: https://n
+extjs.org/docs/app/api-re
+ference/cli/next#next-lin
+t-options
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo       
+       : NotSpecified:   
+  (ΓÜá `eslint` co...x   
+ t-lint-options:Strin    
+g) [], RemoteExcepti    
+on
+    + FullyQualifiedErro 
+   rId : NativeCommandE  
+  rror
+ 
+ΓÜá Invalid 
+next.config.mjs options 
+detected: 
+ΓÜá     Unrecognized 
+key(s) in object: 
+'eslint'
+ΓÜá See more info here: h
+ttps://nextjs.org/docs/me
+ssages/invalid-next-confi
+g
+Γû▓ Next.js 16.2.0 (Turbopack)
+
+ΓÜá The "middleware" 
+file convention is 
+deprecated. Please use 
+"proxy" instead. Learn 
+more: https://nextjs.org/
+docs/messages/middleware-
+to-proxy
+  Creating an optimized production build ...
+Turbopack build 
+encountered 1 warnings:
+./frontend/next.config.mj
+s
+Encountered unexpected 
+file in NFT list
+A file was traced that 
+indicates that the whole 
+project was traced 
+unintentionally. 
+Somewhere in the import 
+trace below, there are:
+- filesystem operations 
+(like path.join, 
+path.resolve or 
+fs.readFile), or
+- very dynamic requires 
+(like require('./' + 
+foo)).
+To resolve this, you can
+- remove them if 
+possible, or
+- only use them in 
+development, or
+- make sure they are 
+statically scoped to 
+some subfolder: 
+path.join(process.cwd(), 
+'data', bar), or
+- add ignore comments: pa
+th.join(/*turbopackIgnore
+: true*/ process.cwd(), 
+bar)
+
+Import trace:
+  App Route:
+    ./frontend/next.confi
+g.mjs
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+
+> Build error occurred
+Error: Turbopack build 
+failed with 3 errors:
+./frontend/src/app/admin/
+businesses/page.tsx
+Reading source code for 
+parsing failed
+An unexpected error 
+happened while trying to 
+read the source code to 
+parse: failed to convert 
+rope into string
+
+Caused by:
+- invalid utf-8 sequence 
+of 1 bytes from index 0
+
+Import trace:
+  App Route:
+    ./frontend/src/app/ad
+min/businesses/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/app/admin/
+freelancers/page.tsx
+Reading source code for 
+parsing failed
+An unexpected error 
+happened while trying to 
+read the source code to 
+parse: failed to convert 
+rope into string
+
+Caused by:
+- invalid utf-8 sequence 
+of 1 bytes from index 0
+
+Import trace:
+  App Route:
+    ./frontend/src/app/ad
+min/freelancers/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/app/admin/
+revenue/page.tsx
+Reading source code for 
+parsing failed
+An unexpected error 
+happened while trying to 
+read the source code to 
+parse: failed to convert 
+rope into string
+
+Caused by:
+- invalid utf-8 sequence 
+of 1 bytes from index 0
+
+Import trace:
+  App Route:
+    ./frontend/src/app/ad
+min/revenue/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+    at ignore-listed 
+frames
+npm error Lifecycle 
+script `build` failed 
+with error:
+npm error code 1
+npm error path C:\Users\s
+urya\Downloads\b_fr43YIQT
+ixd-1774628689391\fronten
+d
+npm error workspace 
+my-project@0.1.0
+npm error location C:\Use
+rs\surya\Downloads\b_fr43
+YIQTixd-1774628689391\fro
+ntend
+npm error command failed
+npm error command C:\Wind
+ows\system32\cmd.exe /d 
+/s /c next build

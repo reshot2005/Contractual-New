@@ -94,17 +94,21 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCountUp } from "@/lib/hooks/use-count-up"
 import { cn } from "@/lib/utils"
-import {
-  CATEGORY_OPTIONS,
-  MOCK_ACTIVITIES,
-  MOCK_APPLICATIONS,
-  MOCK_GIG_ROWS,
-  MOCK_SKILL_POOL,
-  SPARKLINE_VIEWS,
-  RADIAL_APPLICATION_RATE,
-  TIMELINE_OPTIONS,
-  type GigStatus,
-} from "@/lib/mock-data"
+export type GigStatus = "Open" | "In Review" | "Urgent" | "Closed" | "Draft"
+
+const CATEGORY_OPTIONS = [
+  { id: "development", emoji: "💻", label: "Development" },
+  { id: "design", emoji: "🎨", label: "Design" },
+  { id: "marketing", emoji: "📈", label: "Marketing" },
+]
+
+const MOCK_SKILL_POOL = ["React", "TypeScript", "Node.js", "Figma", "Marketing"]
+const MOCK_GIG_ROWS: any[] = []
+const MOCK_ACTIVITIES: any[] = []
+const MOCK_APPLICATIONS: any[] = []
+const SPARKLINE_VIEWS: any[] = []
+const RADIAL_APPLICATION_RATE: any[] = []
+const TIMELINE_OPTIONS: any[] = []
 
 const fadeUpContainer = {
   hidden: {},

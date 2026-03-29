@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { FreelancerGigDetail } from "@/components/freelancer/pages/freelancer-gig-detail"

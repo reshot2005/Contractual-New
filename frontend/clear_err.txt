@@ -1,0 +1,2176 @@
+﻿
+> my-project@0.1.0 build
+> next build
+
+node.exe : ΓÜá `eslint` 
+configuration in 
+next.config.mjs is no 
+longer supported. See 
+more info here: https://n
+extjs.org/docs/app/api-re
+ference/cli/next#next-lin
+t-options
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo       
+       : NotSpecified:   
+  (ΓÜá `eslint` co...x   
+ t-lint-options:Strin    
+g) [], RemoteExcepti    
+on
+    + FullyQualifiedErro 
+   rId : NativeCommandE  
+  rror
+ 
+ΓÜá Invalid 
+next.config.mjs options 
+detected: 
+ΓÜá     Unrecognized 
+key(s) in object: 
+'eslint'
+ΓÜá See more info here: h
+ttps://nextjs.org/docs/me
+ssages/invalid-next-confi
+g
+Γû▓ Next.js 16.2.0 (Turbopack)
+
+ΓÜá The "middleware" 
+file convention is 
+deprecated. Please use 
+"proxy" instead. Learn 
+more: https://nextjs.org/
+docs/messages/middleware-
+to-proxy
+  Creating an optimized production build ...
+Turbopack build 
+encountered 1 warnings:
+./frontend/next.config.mj
+s
+Encountered unexpected 
+file in NFT list
+A file was traced that 
+indicates that the whole 
+project was traced 
+unintentionally. 
+Somewhere in the import 
+trace below, there are:
+- filesystem operations 
+(like path.join, 
+path.resolve or 
+fs.readFile), or
+- very dynamic requires 
+(like require('./' + 
+foo)).
+To resolve this, you can
+- remove them if 
+possible, or
+- only use them in 
+development, or
+- make sure they are 
+statically scoped to 
+some subfolder: 
+path.join(process.cwd(), 
+'data', bar), or
+- add ignore comments: pa
+th.join(/*turbopackIgnore
+: true*/ process.cwd(), 
+bar)
+
+Import trace:
+  App Route:
+    ./frontend/next.confi
+g.mjs
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+
+> Build error occurred
+Error: Turbopack build 
+failed with 23 errors:
+./frontend/src/app/admin/
+businesses/page.tsx
+Reading source code for 
+parsing failed
+An unexpected error 
+happened while trying to 
+read the source code to 
+parse: failed to convert 
+rope into string
+
+Caused by:
+- invalid utf-8 sequence 
+of 1 bytes from index 0
+
+Import trace:
+  App Route:
+    ./frontend/src/app/ad
+min/businesses/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/app/admin/
+freelancers/page.tsx
+Reading source code for 
+parsing failed
+An unexpected error 
+happened while trying to 
+read the source code to 
+parse: failed to convert 
+rope into string
+
+Caused by:
+- invalid utf-8 sequence 
+of 1 bytes from index 0
+
+Import trace:
+  App Route:
+    ./frontend/src/app/ad
+min/freelancers/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/app/admin/
+revenue/page.tsx
+Reading source code for 
+parsing failed
+An unexpected error 
+happened while trying to 
+read the source code to 
+parse: failed to convert 
+rope into string
+
+Caused by:
+- invalid utf-8 sequence 
+of 1 bytes from index 0
+
+Import trace:
+  App Route:
+    ./frontend/src/app/ad
+min/revenue/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/app/contra
+cts/[id]/page.tsx:1:10
+You're importing a 
+module that depends on 
+`useParams` into a React 
+Server Component module. 
+This API is only 
+available in Client 
+Components. To fix, mark 
+the file (or its parent) 
+with the `"use client"` 
+directive.
+    Learn more: https://n
+extjs.org/docs/app/api-re
+ference/directives/use-cl
+ient
+[31m[1m>[0m [90m1 
+|[0m [36mimport[0m { 
+useParams } 
+[36mfrom[0m [32m"next/
+navigation"[0m
+  [90m  |[0m          
+[31m[1m^^^^^^^^^[0m
+  [90m2 |[0m 
+[36mimport[0m { [33mCo
+ntractDetailPage[0m } 
+[36mfrom[0m [32m"@/src
+/views/ContractDetail"[0
+m
+  [90m3 |[0m
+  [90m4 |[0m 
+[36mexport[0m 
+[36mdefault[0m 
+[36mfunction[0m [33mCo
+ntractDetailRoute[0m() {
+
+Ecmascript file had an 
+error
+
+Import trace:
+  App Route:
+    ./frontend/src/app/co
+ntracts/[id]/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/app/freela
+ncer/browse-gigs/[id]/pag
+e.tsx:2:10
+You're importing a 
+module that depends on 
+`useParams` into a React 
+Server Component module. 
+This API is only 
+available in Client 
+Components. To fix, mark 
+the file (or its parent) 
+with the `"use client"` 
+directive.
+    Learn more: https://n
+extjs.org/docs/app/api-re
+ference/directives/use-cl
+ient
+  [90m1 |[0m 
+[36mimport[0m 
+[33mLink[0m 
+[36mfrom[0m 
+[32m"next/link"[0m
+[31m[1m>[0m [90m2 
+|[0m [36mimport[0m { 
+useParams } 
+[36mfrom[0m [32m"next/
+navigation"[0m
+  [90m  |[0m          
+[31m[1m^^^^^^^^^[0m
+  [90m3 |[0m 
+[36mimport[0m { [33mFr
+eelancerGigDetail[0m } 
+[36mfrom[0m [32m"@/com
+ponents/freelancer/pages/
+freelancer-gig-detail"[0
+m
+  [90m4 |[0m
+  [90m5 |[0m 
+[36mexport[0m 
+[36mdefault[0m 
+[36mfunction[0m [33mFr
+eelancerGigDetailPage[0m
+() {
+
+Ecmascript file had an 
+error
+
+Import trace:
+  App Route:
+    ./frontend/src/app/fr
+eelancer/browse-gigs/[id]
+/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/app/auth/p
+ending-approval/page.tsx:
+2:10
+You're importing a 
+module that depends on 
+`useSearchParams` into a 
+React Server Component 
+module. This API is only 
+available in Client 
+Components. To fix, mark 
+the file (or its parent) 
+with the `"use client"` 
+directive.
+    Learn more: https://n
+extjs.org/docs/app/api-re
+ference/directives/use-cl
+ient
+  [90m1 |[0m 
+[36mimport[0m 
+[33mLink[0m 
+[36mfrom[0m 
+[32m"next/link"[0m
+[31m[1m>[0m [90m2 
+|[0m [36mimport[0m { 
+useSearchParams } 
+[36mfrom[0m [32m"next/
+navigation"[0m
+  [90m  |[0m          
+[31m[1m^^^^^^^^^^^^^^^[
+0m
+  [90m3 |[0m 
+[36mimport[0m { 
+[33mSuspense[0m } 
+[36mfrom[0m 
+[32m"react"[0m
+  [90m4 |[0m 
+[36mimport[0m { 
+[33mClock[0m, 
+[33mShield[0m, 
+[33mMail[0m, 
+[33mCheckCircle2[0m, 
+[33mArrowRight[0m } 
+[36mfrom[0m 
+[32m"lucide-react"[0m
+  [90m5 |[0m 
+[36mimport[0m { motion 
+} [36mfrom[0m 
+[32m"framer-motion"[0m
+
+Ecmascript file had an 
+error
+
+Import trace:
+  App Route:
+    ./frontend/src/app/au
+th/pending-approval/page.
+tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/app/contra
+cts/[id]/page.tsx:2:1
+Module not found: Can't 
+resolve '@/src/views/Cont
+ractDetail'
+  [90m1 |[0m 
+[36mimport[0m { 
+useParams } 
+[36mfrom[0m [32m"next/
+navigation"[0m
+[31m[1m>[0m [90m2 
+|[0m [36mimport[0m { 
+[33mContractDetailPage[0
+m } [36mfrom[0m [32m"@
+/src/views/ContractDetail
+"[0m
+  [90m  |[0m [31m[1m^
+^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^[0m
+  [90m3 |[0m
+  [90m4 |[0m 
+[36mexport[0m 
+[36mdefault[0m 
+[36mfunction[0m [33mCo
+ntractDetailRoute[0m() {
+  [90m5 |[0m   
+[36mconst[0m { id } = 
+useParams<{ id: string 
+}>()
+
+Import map: aliased to 
+relative './src/src/views
+/ContractDetail' inside 
+of [project]/frontend
+
+
+Import trace:
+  App Route:
+    ./frontend/src/app/co
+ntracts/[id]/page.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+https://nextjs.org/docs/m
+essages/module-not-found
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export CATEGORY_OPTIONS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+CATEGORY_OPTIONS was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-client] 
+(ecmascript).
+Did you mean to import 
+CATEGORY_PHOTOS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export CATEGORY_OPTIONS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+CATEGORY_OPTIONS was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-ssr] 
+(ecmascript).
+Did you mean to import 
+CATEGORY_PHOTOS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export MOCK_ACTIVITIES 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+MOCK_ACTIVITIES was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-client] 
+(ecmascript).
+Did you mean to import 
+MOCK_GIGS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export MOCK_ACTIVITIES 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+MOCK_ACTIVITIES was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-ssr] 
+(ecmascript).
+Did you mean to import 
+MOCK_GIGS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export MOCK_APPLICATIONS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+MOCK_APPLICATIONS was 
+not found in module [proj
+ect]/frontend/src/lib/moc
+k-data.ts [app-client] 
+(ecmascript).
+Did you mean to import 
+MOCK_GIGS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export MOCK_APPLICATIONS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+MOCK_APPLICATIONS was 
+not found in module [proj
+ect]/frontend/src/lib/moc
+k-data.ts [app-ssr] 
+(ecmascript).
+Did you mean to import 
+MOCK_GIGS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export MOCK_GIG_ROWS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export MOCK_GIG_ROWS 
+was not found in module [
+project]/frontend/src/lib
+/mock-data.ts 
+[app-client] 
+(ecmascript).
+Did you mean to import 
+MOCK_GIGS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export MOCK_GIG_ROWS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export MOCK_GIG_ROWS 
+was not found in module [
+project]/frontend/src/lib
+/mock-data.ts [app-ssr] 
+(ecmascript).
+Did you mean to import 
+MOCK_GIGS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export MOCK_SKILL_POOL 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+MOCK_SKILL_POOL was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-client] 
+(ecmascript).
+Did you mean to import 
+MOCK_GIGS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export MOCK_SKILL_POOL 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+MOCK_SKILL_POOL was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-ssr] 
+(ecmascript).
+Did you mean to import 
+MOCK_GIGS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export 
+RADIAL_APPLICATION_RATE 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+RADIAL_APPLICATION_RATE 
+was not found in module [
+project]/frontend/src/lib
+/mock-data.ts 
+[app-client] 
+(ecmascript).
+Did you mean to import 
+FREELANCER_AVATAR_IDS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export 
+RADIAL_APPLICATION_RATE 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+RADIAL_APPLICATION_RATE 
+was not found in module [
+project]/frontend/src/lib
+/mock-data.ts [app-ssr] 
+(ecmascript).
+Did you mean to import 
+FREELANCER_AVATAR_IDS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export SPARKLINE_VIEWS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+SPARKLINE_VIEWS was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-client] 
+(ecmascript).
+Did you mean to import 
+FREELANCER_AVATAR_IDS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export SPARKLINE_VIEWS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+SPARKLINE_VIEWS was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-ssr] 
+(ecmascript).
+Did you mean to import 
+FREELANCER_AVATAR_IDS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export TIMELINE_OPTIONS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+TIMELINE_OPTIONS was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-client] 
+(ecmascript).
+Did you mean to import 
+CATEGORY_PHOTOS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+./frontend/src/views/busi
+ness/Dashboard.tsx:97:1
+Export TIMELINE_OPTIONS 
+doesn't exist in target 
+module
+  [90m 95 |[0m 
+[36mimport[0m { 
+useCountUp } 
+[36mfrom[0m [32m"@/lib
+/hooks/use-count-up"[0m
+  [90m 96 |[0m 
+[36mimport[0m { cn } 
+[36mfrom[0m 
+[32m"@/lib/utils"[0m
+[31m[1m>[0m [90m 97 
+|[0m [36mimport[0m {
+  [90m    |[0m 
+[31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 98 
+|[0m   [33mCATEGORY_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 99 
+|[0m   
+[33mMOCK_ACTIVITIES[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m100 
+|[0m   [33mMOCK_APPLICA
+TIONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m101 
+|[0m   
+[33mMOCK_GIG_ROWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m102 
+|[0m   
+[33mMOCK_SKILL_POOL[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m103 
+|[0m   
+[33mSPARKLINE_VIEWS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m104 
+|[0m   [33mRADIAL_APPLI
+CATION_RATE[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+^^[0m
+[31m[1m>[0m [90m105 
+|[0m   [33mTIMELINE_OPT
+IONS[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m106 
+|[0m   [36mtype[0m 
+[33mGigStatus[0m,
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m107 
+|[0m } [36mfrom[0m [3
+2m"@/lib/mock-data"[0m
+  [90m    |[0m [31m[1
+m^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
+  [90m108 |[0m
+  [90m109 |[0m 
+[36mconst[0m 
+fadeUpContainer = {
+  [90m110 |[0m   
+hidden: {},
+
+The export 
+TIMELINE_OPTIONS was not 
+found in module [project]
+/frontend/src/lib/mock-da
+ta.ts [app-ssr] 
+(ecmascript).
+Did you mean to import 
+CATEGORY_PHOTOS?
+All exports of the 
+module are statically 
+known (It doesn't have 
+dynamic exports). So 
+it's known statically 
+that the requested 
+export doesn't exist.
+
+Import traces:
+  Server Component:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./frontend/src/app/da
+shboard/business/page.tsx
+
+  App Route:
+    ./frontend/src/views/
+business/Dashboard.tsx
+    ./backend/prisma/gene
+rated/client/index.js
+    ./frontend/src/app/ap
+i/gigs/[id]/route.ts
+
+
+    at <unknown> (./front
+end/src/app/contracts/[id
+]/page.tsx:1:10)
+    at <unknown> (./front
+end/src/app/freelancer/br
+owse-gigs/[id]/page.tsx:2
+:10)
+    at <unknown> (./front
+end/src/app/auth/pending-
+approval/page.tsx:2:10)
+    at <unknown> (./front
+end/src/app/contracts/[id
+]/page.tsx:2:1)
+    at <unknown> (https:/
+/nextjs.org/docs/messages
+/module-not-found)
+    at <unknown> (./front
+end/src/views/business/Da
+shboard.tsx:97:1)
+    ... collapsed 15 
+duplicate lines matching 
+above 1 lines 15 times...
+npm error Lifecycle 
+script `build` failed 
+with error:
+npm error code 1
+npm error path C:\Users\s
+urya\Downloads\b_fr43YIQT
+ixd-1774628689391\fronten
+d
+npm error workspace 
+my-project@0.1.0
+npm error location C:\Use
+rs\surya\Downloads\b_fr43
+YIQTixd-1774628689391\fro
+ntend
+npm error command failed
+npm error command C:\Wind
+ows\system32\cmd.exe /d 
+/s /c next build
