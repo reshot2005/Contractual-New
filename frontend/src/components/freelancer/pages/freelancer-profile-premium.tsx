@@ -440,24 +440,31 @@ export function FreelancerProfilePremium({ initialData }: { initialData?: Profil
               <Header title="Portfolio" action={<button onClick={() => setShowPortfolio(true)} className="text-teal-600 font-black text-[11px] uppercase hover:bg-teal-50 flex items-center"><Plus size={14} className="mr-1" /> Add Work</button>} />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                 {(p.portfolio || []).map((item) => (
-                  <div key={item.id} className="aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 relative group cursor-pointer shadow-sm">
-                    {item.imageUrl ? <Image src={item.imageUrl} fill loading="lazy" alt="Portfolio item" className="object-cover group-hover:scale-110 transition-transform duration-500" /> : <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300"><ImageIcon size={32} /></div>}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-6 text-center">
-                      <p className="text-white font-bold text-sm mb-4 leading-tight">{item.title}</p>
-                      {item.url ? (
-                        <a 
-                          href={item.url.startsWith('http') ? item.url : `https://${item.url}`} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="h-8 rounded-full border border-white text-white text-[11px] font-black uppercase px-4 flex items-center hover:bg-white hover:text-black transition-colors"
-                        >
-                          View Project →
-                        </a>
-                      ) : (
+                  item.url ? (
+                    <a
+                      key={item.id}
+                      href={item.url.startsWith("http") ? item.url : `https://${item.url}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 relative group cursor-pointer shadow-sm block"
+                    >
+                      {item.imageUrl ? <Image src={item.imageUrl} fill loading="lazy" alt="Portfolio item" className="object-cover group-hover:scale-110 transition-transform duration-500" /> : <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300"><ImageIcon size={32} /></div>}
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-6 text-center">
+                        <p className="text-white font-bold text-sm mb-4 leading-tight">{item.title}</p>
+                        <span className="h-8 rounded-full border border-white text-white text-[11px] font-black uppercase px-4 flex items-center hover:bg-white hover:text-black transition-colors">
+                          Open Project -&gt;
+                        </span>
+                      </div>
+                    </a>
+                  ) : (
+                    <div key={item.id} className="aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 relative group cursor-pointer shadow-sm">
+                      {item.imageUrl ? <Image src={item.imageUrl} fill loading="lazy" alt="Portfolio item" className="object-cover group-hover:scale-110 transition-transform duration-500" /> : <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300"><ImageIcon size={32} /></div>}
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-6 text-center">
+                        <p className="text-white font-bold text-sm mb-4 leading-tight">{item.title}</p>
                         <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">No Link Provided</span>
-                      )}
+                      </div>
                     </div>
-                  </div>
+                  )
                 ))}
                 {(!p.portfolio || p.portfolio.length === 0) && (
                   <div className="col-span-full py-12 border-2 border-dashed border-gray-100 rounded-3xl flex flex-col items-center justify-center text-gray-400">

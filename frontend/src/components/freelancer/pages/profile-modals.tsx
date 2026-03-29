@@ -7,9 +7,7 @@ import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
-import Image from "next/image"
 import { addSkill, addPortfolio, addExperience, addEducation, removeSkill, removeExperience, removeEducation } from "@/app/freelancer/profile/actions"
-import { UploadButton } from "@/lib/uploadthing-react"
 
 export function AddSkillModal({ open: controlledOpen, onOpenChange }: { open?: boolean, onOpenChange?: (open: boolean) => void } = {}) {
   const qc = useQueryClient()
@@ -74,15 +72,14 @@ export function AddPortfolioModal({ open: controlledOpen, onOpenChange }: { open
   const [title, setTitle] = useState("")
   const [desc, setDesc] = useState("")
   const [url, setUrl] = useState("")
-  const [img, setImg] = useState("")
 
   const m = useMutation({
-    mutationFn: () => addPortfolio(title, desc, url, img),
+    mutationFn: () => addPortfolio(title, desc, url),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: qk.freelancerProfile() })
       toast.success("Portfolio item added")
       setOpen(false)
-      setTitle(""); setDesc(""); setUrl(""); setImg("")
+      setTitle(""); setDesc(""); setUrl("")
     }
   })
 
@@ -97,19 +94,12 @@ export function AddPortfolioModal({ open: controlledOpen, onOpenChange }: { open
         <DialogHeader><DialogTitle>Add to Portfolio</DialogTitle></DialogHeader>
         <div className="space-y-4 pt-4">
           <input className="w-full p-3 border rounded-xl" placeholder="Project Title" value={title} onChange={e => setTitle(e.target.value)} />
-          <input className="w-full p-3 border rounded-xl" placeholder="Project URL (Optional)" value={url} onChange={e => setUrl(e.target.value)} />
+          <input className="w-full p-3 border rounded-xl" placeholder="Project URL (Required)" value={url} onChange={e => setUrl(e.target.value)} />
           <textarea className="w-full p-3 border rounded-xl" placeholder="Description" value={desc} onChange={e => setDesc(e.target.value)} />
-          <div className="border-2 border-dashed p-4 rounded-xl flex flex-col justify-center items-center">
-             {img ? (
-               <div className="relative h-32 w-full"><Image src={img} fill alt="Portfolio preview" className="rounded-lg object-cover" /><Button size="sm" variant="destructive" className="absolute top-1 right-1 z-10" onClick={() => setImg("")}>X</Button></div>
-             ) : (
-               <UploadButton
-                 endpoint="portfolioFiles"
-                 onClientUploadComplete={(res) => { if(res?.[0]) setImg(res[0].url) }}
-               />
-             )}
+          <div className="rounded-xl border border-dashed p-4 text-center text-xs font-medium text-gray-500">
+            Image upload is disabled. Portfolio cards will open this project URL directly.
           </div>
-          <Button className="w-full bg-teal-600 hover:bg-teal-700" onClick={() => m.mutate()} disabled={!title || !img || m.isPending}>Save Portfolio</Button>
+          <Button className="w-full bg-teal-600 hover:bg-teal-700" onClick={() => m.mutate()} disabled={!title || !url || m.isPending}>Save Portfolio</Button>
         </div>
       </DialogContent>
     </Dialog>

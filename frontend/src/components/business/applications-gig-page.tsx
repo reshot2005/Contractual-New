@@ -333,6 +333,23 @@ function ApplicantCard({
             </div>
           </div>
 
+          <div className="flex flex-col gap-2">
+            <Link
+              href={`/freelancer/${f.id}`}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-bold text-gray-700 transition-all hover:border-[#6d9c9f] hover:text-[#6d9c9f]"
+            >
+              <Eye className="h-4 w-4" />
+              Preview Profile
+            </Link>
+            <Link
+              href={`/business/messages?freelancerId=${encodeURIComponent(f.id)}${gig?.id ? `&gigId=${encodeURIComponent(gig.id)}` : ""}`}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#6d9c9f] px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-[#5a8a8d]"
+            >
+              <MessageSquare className="h-4 w-4" />
+              Messages
+            </Link>
+          </div>
+
           {a.status === "PENDING" && (
             <div className="flex flex-col gap-2 w-full mt-auto">
               <button

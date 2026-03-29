@@ -1,78 +1,258 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useMemo } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { formatDistanceToNow } from "date-fns"
 import {
-  UserPlus,
-  FileCheck,
-  Banknote,
   AlertTriangle,
-  Star,
+  Banknote,
+  Bell,
   CheckCircle,
+  FileCheck,
   MessageCircle,
-  X,
+  Star,
+  UserPlus,
 } from "lucide-react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+import { qk } from "@/lib/realtime/query-keys"
+import { useSocket } from "@/hooks/useSocket"
+import { SOCKET_EVENTS } from "@/lib/realtime/socket-events"
 
-type Notif = {
+type UserType = "business" | "freelancer" | "admin"
+
+type NotificationRow = {
   id: string
-  type: "proposal" | "contract" | "pay" | "dispute" | "review" | "gig" | "msg"
+  type: string
   title: string
-  desc: string
-  time: string
-  unread: boolean
-  avatar?: boolean
+  message: string
+  isRead: boolean
+  link?: string | null
+  createdAt: string
 }
 
-const notifications: Notif[] = [
-  { id: "1", type: "proposal", title: "New proposal", desc: "Jordan sent a proposal for your React gig.", time: "5m ago", unread: true },
-  { id: "2", type: "contract", title: "Contract signed", desc: "CNT-2026-0092 is now active.", time: "1h ago", unread: true },
-  { id: "3", type: "pay", title: "Payment released", desc: "₹840 released to Maya Roy.", time: "Yesterday", unread: false },
-  { id: "4", type: "dispute", title: "Dispute opened", desc: "Order ORD-883 flagged for review.", time: "2d ago", unread: true },
-  { id: "5", type: "review", title: "New review", desc: "5★ from Bloom & Co.", time: "3d ago", unread: false, avatar: true },
-  { id: "6", type: "gig", title: "Gig approved", desc: "Your gig passed moderation.", time: "1w ago", unread: false },
-  { id: "7", type: "msg", title: "New message", desc: "Unread messages in Logo project.", time: "1w ago", unread: false },
-]
+type NotificationResponse = {
+  data: NotificationRow[]
+  meta?: { unread?: number }
+  error?: string
+}
 
-function TypeIcon({ type }: { type: Notif["type"] }) {
+const PROPOSAL_TYPES = new Set([
+  "APPLICATION_RECEIVED",
+  "APPLICATION_ACCEPTED",
+  "APPLICATION_REJECTED",
+])
+
+const PAYMENT_TYPES = new Set(["PAYMENT_RELEASED"])
+
+const CONTRACT_TYPES = new Set([
+  "CONTRACT_CREATED",
+  "CONTRACT_COMPLETED",
+  "SUBMISSION_RECEIVED",
+  "REVISION_REQUESTED",
+  "DISPUTE_OPENED",
+  "DISPUTE_RESOLVED",
+])
+
+function bucket(type: string) {
+  if (PROPOSAL_TYPES.has(type)) return "proposals"
+  if (PAYMENT_TYPES.has(type)) return "payments"
+  if (CONTRACT_TYPES.has(type)) return "contracts"
+  return "system"
+}
+
+function TypeIcon({ type }: { type: string }) {
   const wrap = "flex h-10 w-10 items-center justify-center rounded-full"
-  const map = {
-    proposal: { Icon: UserPlus, className: `${wrap} bg-[var(--primary-light)] text-[var(--primary-dark)]` },
-    contract: { Icon: FileCheck, className: `${wrap} bg-emerald-100 text-emerald-800` },
-    pay: { Icon: Banknote, className: `${wrap} bg-amber-100 text-amber-800` },
-    dispute: { Icon: AlertTriangle, className: `${wrap} bg-red-100 text-red-700` },
-    review: { Icon: Star, className: `${wrap} bg-amber-100 text-amber-700` },
-    gig: { Icon: CheckCircle, className: `${wrap} bg-[var(--primary-light)] text-[var(--primary-dark)]` },
-    msg: { Icon: MessageCircle, className: `${wrap} bg-sky-100 text-sky-800` },
+  if (PROPOSAL_TYPES.has(type)) {
+    return (
+      <div className={`${wrap} bg-[var(--primary-light)] text-[var(--primary-dark)]`}>
+        <UserPlus className="h-5 w-5" />
+      </div>
+    )
   }
-  const { Icon, className } = map[type]
+
+  if (PAYMENT_TYPES.has(type)) {
+    return (
+      <div className={`${wrap} bg-amber-100 text-amber-800`}>
+        <Banknote className="h-5 w-5" />
+      </div>
+    )
+  }
+
+  if (type === "MESSAGE_RECEIVED") {
+    return (
+      <div className={`${wrap} bg-sky-100 text-sky-800`}>
+        <MessageCircle className="h-5 w-5" />
+      </div>
+    )
+  }
+
+  if (type === "REVIEW_RECEIVED") {
+    return (
+      <div className={`${wrap} bg-amber-100 text-amber-700`}>
+        <Star className="h-5 w-5" />
+      </div>
+    )
+  }
+
+  if (type === "DISPUTE_OPENED" || type === "DISPUTE_RESOLVED") {
+    return (
+      <div className={`${wrap} bg-red-100 text-red-700`}>
+        <AlertTriangle className="h-5 w-5" />
+      </div>
+    )
+  }
+
+  if (CONTRACT_TYPES.has(type)) {
+    return (
+      <div className={`${wrap} bg-emerald-100 text-emerald-800`}>
+        <FileCheck className="h-5 w-5" />
+      </div>
+    )
+  }
+
+  if (type === "GIG_FLAGGED" || type === "BUSINESS_APPROVED" || type === "BUSINESS_REJECTED") {
+    return (
+      <div className={`${wrap} bg-[var(--primary-light)] text-[var(--primary-dark)]`}>
+        <CheckCircle className="h-5 w-5" />
+      </div>
+    )
+  }
+
   return (
-    <div className={className}>
-      <Icon className="h-5 w-5" />
+    <div className={`${wrap} bg-slate-100 text-slate-700`}>
+      <Bell className="h-5 w-5" />
     </div>
   )
 }
 
-export function NotificationsPage({ userType }: { userType: "business" | "freelancer" | "admin" }) {
-  const [items, setItems] = useState(notifications)
-  const unread = items.filter((n) => n.unread).length
+export function NotificationsPage({ userType }: { userType: UserType }) {
+  const router = useRouter()
+  const queryClient = useQueryClient()
+  const { socket } = useSocket()
 
-  const dismiss = (id: string) => setItems((xs) => xs.filter((n) => n.id !== id))
-  const markAllRead = () => setItems((xs) => xs.map((n) => ({ ...n, unread: false })))
+  const q = useQuery({
+    queryKey: qk.notifications(),
+    queryFn: async (): Promise<NotificationResponse> => {
+      const res = await fetch("/api/notifications?limit=100")
+      const j = (await res.json()) as NotificationResponse
+      if (!res.ok) throw new Error(j.error ?? "Failed to load notifications")
+      return j
+    },
+    refetchInterval: 30_000,
+  })
 
-  const filterTab = (type: string) => {
-    if (type === "all") return items
-    // demo grouping
-    if (type === "contracts") return items.filter((n) => ["contract", "dispute", "gig"].includes(n.type))
-    if (type === "proposals") return items.filter((n) => n.type === "proposal")
-    if (type === "payments") return items.filter((n) => n.type === "pay")
-    return items.filter((n) => n.type === "msg" || n.type === "review")
+  useEffect(() => {
+    if (!socket) return
+    const refresh = () => {
+      queryClient.invalidateQueries({ queryKey: qk.notifications() })
+    }
+
+    socket.on(SOCKET_EVENTS.NOTIFICATION_NEW, refresh)
+    socket.on(SOCKET_EVENTS.MESSAGE_NEW, refresh)
+    socket.on(SOCKET_EVENTS.APPLICATION_NEW, refresh)
+    socket.on(SOCKET_EVENTS.APPLICATION_ACCEPTED, refresh)
+    socket.on(SOCKET_EVENTS.APPLICATION_REJECTED, refresh)
+    socket.on(SOCKET_EVENTS.CONTRACT_NEW, refresh)
+    socket.on(SOCKET_EVENTS.CONTRACT_STATUS, refresh)
+    socket.on(SOCKET_EVENTS.CONTRACT_COMPLETED, refresh)
+    socket.on(SOCKET_EVENTS.SUBMISSION_NEW, refresh)
+    socket.on(SOCKET_EVENTS.REVISION_REQUESTED, refresh)
+
+    return () => {
+      socket.off(SOCKET_EVENTS.NOTIFICATION_NEW, refresh)
+      socket.off(SOCKET_EVENTS.MESSAGE_NEW, refresh)
+      socket.off(SOCKET_EVENTS.APPLICATION_NEW, refresh)
+      socket.off(SOCKET_EVENTS.APPLICATION_ACCEPTED, refresh)
+      socket.off(SOCKET_EVENTS.APPLICATION_REJECTED, refresh)
+      socket.off(SOCKET_EVENTS.CONTRACT_NEW, refresh)
+      socket.off(SOCKET_EVENTS.CONTRACT_STATUS, refresh)
+      socket.off(SOCKET_EVENTS.CONTRACT_COMPLETED, refresh)
+      socket.off(SOCKET_EVENTS.SUBMISSION_NEW, refresh)
+      socket.off(SOCKET_EVENTS.REVISION_REQUESTED, refresh)
+    }
+  }, [socket, queryClient])
+
+  const markAllRead = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/notifications/read", { method: "PATCH" })
+      if (!res.ok) throw new Error("Failed to mark all as read")
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: qk.notifications() })
+      const prev = queryClient.getQueryData<NotificationResponse>(qk.notifications())
+      queryClient.setQueryData<NotificationResponse>(qk.notifications(), (old) => {
+        if (!old) return old
+        return {
+          ...old,
+          data: old.data.map((n) => ({ ...n, isRead: true })),
+          meta: { ...old.meta, unread: 0 },
+        }
+      })
+      return { prev }
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.prev) queryClient.setQueryData(qk.notifications(), ctx.prev)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: qk.notifications() })
+    },
+  })
+
+  const markOneRead = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/notifications/${id}/read`, { method: "PATCH" })
+      if (!res.ok) throw new Error("Failed to mark notification as read")
+    },
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: qk.notifications() })
+      const prev = queryClient.getQueryData<NotificationResponse>(qk.notifications())
+      queryClient.setQueryData<NotificationResponse>(qk.notifications(), (old) => {
+        if (!old) return old
+        const alreadyRead = old.data.find((n) => n.id === id)?.isRead
+        const unread = old.meta?.unread ?? old.data.filter((n) => !n.isRead).length
+        return {
+          ...old,
+          data: old.data.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+          meta: { ...old.meta, unread: alreadyRead ? unread : Math.max(0, unread - 1) },
+        }
+      })
+      return { prev }
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.prev) queryClient.setQueryData(qk.notifications(), ctx.prev)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: qk.notifications() })
+    },
+  })
+
+  const items = q.data?.data ?? []
+  const unread = q.data?.meta?.unread ?? items.filter((n) => !n.isRead).length
+
+  const counts = useMemo(() => {
+    return {
+      all: items.length,
+      contracts: items.filter((n) => bucket(n.type) === "contracts").length,
+      proposals: items.filter((n) => bucket(n.type) === "proposals").length,
+      payments: items.filter((n) => bucket(n.type) === "payments").length,
+      system: items.filter((n) => bucket(n.type) === "system").length,
+    }
+  }, [items])
+
+  const filterTab = (tab: "all" | "contracts" | "proposals" | "payments" | "system") => {
+    if (tab === "all") return items
+    return items.filter((n) => bucket(n.type) === tab)
+  }
+
+  const openNotification = (n: NotificationRow) => {
+    if (!n.isRead) markOneRead.mutate(n.id)
+    if (n.link) router.push(n.link)
   }
 
   return (
@@ -82,66 +262,70 @@ export function NotificationsPage({ userType }: { userType: "business" | "freela
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-[var(--text-primary)]">Notifications</h1>
             {unread > 0 && (
-              <Badge className="bg-[var(--primary)] text-white hover:bg-[var(--primary)]">{unread} new</Badge>
+              <span className="inline-flex rounded-md bg-[var(--primary)] px-2.5 py-1 text-sm font-semibold text-white">
+                {unread} new
+              </span>
             )}
           </div>
-          <button type="button" onClick={markAllRead} className="text-sm font-semibold text-[var(--primary-dark)] hover:underline">
+          <button type="button" onClick={() => markAllRead.mutate()} className="text-sm font-semibold text-[var(--primary-dark)] hover:underline">
             Mark all read
           </button>
         </div>
 
         <Tabs defaultValue="all" className="page-section-enter w-full" style={{ ["--stagger-delay" as string]: "0.05s" }}>
           <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1 rounded-xl bg-[var(--bg-alt)] p-1">
-            <TabsTrigger value="all" className="rounded-lg">
-              All ({items.length})
-            </TabsTrigger>
-            <TabsTrigger value="contracts" className="rounded-lg">
-              Contracts (8)
-            </TabsTrigger>
-            <TabsTrigger value="proposals" className="rounded-lg">
-              Proposals (12)
-            </TabsTrigger>
-            <TabsTrigger value="payments" className="rounded-lg">
-              Payments (4)
-            </TabsTrigger>
-            <TabsTrigger value="system" className="rounded-lg">
-              System (3)
-            </TabsTrigger>
+            <TabsTrigger value="all" className="rounded-lg">All ({counts.all})</TabsTrigger>
+            <TabsTrigger value="contracts" className="rounded-lg">Contracts ({counts.contracts})</TabsTrigger>
+            <TabsTrigger value="proposals" className="rounded-lg">Proposals ({counts.proposals})</TabsTrigger>
+            <TabsTrigger value="payments" className="rounded-lg">Payments ({counts.payments})</TabsTrigger>
+            <TabsTrigger value="system" className="rounded-lg">System ({counts.system})</TabsTrigger>
           </TabsList>
+
           {(["all", "contracts", "proposals", "payments", "system"] as const).map((tab) => (
             <TabsContent key={tab} value={tab} className="mt-4 space-y-2">
-              {filterTab(tab).map((n) => (
-                <div
+              {q.isLoading && (
+                <div className="rounded-2xl border border-[var(--border)] bg-white p-6 text-sm text-[var(--text-secondary)]">
+                  Loading notifications...
+                </div>
+              )}
+
+              {q.isError && (
+                <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+                  {(q.error as Error).message}
+                </div>
+              )}
+
+              {!q.isLoading && !q.isError && filterTab(tab).length === 0 && (
+                <div className="rounded-2xl border border-[var(--border)] bg-white p-6 text-sm text-[var(--text-secondary)]">
+                  No notifications in this section yet.
+                </div>
+              )}
+
+              {!q.isLoading && !q.isError && filterTab(tab).map((n) => (
+                <button
                   key={n.id}
+                  type="button"
+                  onClick={() => openNotification(n)}
                   className={cn(
-                    "group relative flex gap-3 rounded-2xl border border-[var(--border)] bg-white p-4 pr-10 shadow-sm transition-all card-hover-lift",
-                    n.unread && "border-l-[3px] border-l-[var(--primary)] bg-[var(--primary-light)]/40"
+                    "group relative flex w-full gap-3 rounded-2xl border border-[var(--border)] bg-white p-4 text-left shadow-sm transition-all card-hover-lift",
+                    !n.isRead && "border-l-[3px] border-l-[var(--primary)] bg-[var(--primary-light)]/40"
                   )}
                 >
-                  {n.avatar ? (
-                    <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-[var(--primary)] text-white">B</AvatarFallback>
-                    </Avatar>
-                  ) : (
-                    <TypeIcon type={n.type} />
-                  )}
+                  <TypeIcon type={n.type} />
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-[var(--text-primary)]">{n.title}</p>
-                    <p className="text-sm text-[var(--text-secondary)]">{n.desc}</p>
-                    <p className="mt-1 text-xs text-[var(--text-secondary)]">{n.time}</p>
+                    <p className="text-sm text-[var(--text-secondary)]">{n.message}</p>
+                    <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                      {formatDistanceToNow(new Date(n.createdAt), { addSuffix: true })}
+                    </p>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    {n.unread && <span className="h-2 w-2 rounded-full bg-[var(--primary)]" />}
-                    <button
-                      type="button"
-                      aria-label="Dismiss"
-                      onClick={() => dismiss(n.id)}
-                      className="absolute right-3 top-3 rounded-lg p-1 text-[var(--text-secondary)] opacity-0 transition-opacity hover:bg-[var(--bg-alt)] group-hover:opacity-100"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
+                    {!n.isRead && <span className="h-2 w-2 rounded-full bg-[var(--primary)]" />}
+                    {!n.isRead && (
+                      <span className="text-xs text-[var(--primary-dark)]">Unread</span>
+                    )}
                   </div>
-                </div>
+                </button>
               ))}
             </TabsContent>
           ))}

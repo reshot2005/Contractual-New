@@ -111,8 +111,9 @@ export default async function FreelancerPage({ params }: { params: Promise<{ id:
                       {item.imageUrl ? <Image src={item.imageUrl} fill alt={item.title} className="object-cover group-hover:scale-110 transition-transform duration-500" /> : <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300"><FolderOpen size={32} /></div>}
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-6 text-center">
                         <p className="text-white font-bold text-sm mb-4 leading-tight">{item.title}</p>
-                        {item.url && <a href={item.url} target="_blank" rel="noreferrer" className="h-8 rounded-full border border-white text-white text-[11px] font-black uppercase px-4 flex items-center hover:bg-white hover:text-black transition-colors">View Project →</a>}
+                        {item.url && <a href={item.url.startsWith("http") ? item.url : `https://${item.url}`} target="_blank" rel="noreferrer" className="h-8 rounded-full border border-white text-white text-[11px] font-black uppercase px-4 flex items-center hover:bg-white hover:text-black transition-colors">Open Project -&gt;</a>}
                       </div>
+                      {item.url && <a href={item.url.startsWith("http") ? item.url : `https://${item.url}`} target="_blank" rel="noreferrer" className="absolute inset-0 z-10" aria-label={`Open ${item.title}`} />}
                     </div>
                   ))}
                  </div>

@@ -39,12 +39,23 @@ export async function removeSkill(id: string) {
   return { success: true }
 }
 
-export async function addPortfolio(title: string, description: string, url: string, imageUrl: string) {
+export async function addPortfolio(
+  title: string,
+  description: string,
+  url: string,
+  imageUrl?: string | null
+) {
   const session = await auth()
   if (!session?.user?.id) throw new Error("Unauthorized")
   
   await prisma.portfolio.create({
-    data: { title, description, url, imageUrl, userId: session.user.id }
+    data: {
+      title,
+      description,
+      url,
+      imageUrl: imageUrl || null,
+      userId: session.user.id,
+    },
   })
   await updateCompleteness(session.user.id)
   return { success: true }

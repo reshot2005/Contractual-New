@@ -255,6 +255,13 @@ export function BusinessApplicationsLive() {
                     </div>
                     <div className="flex gap-2">
                       <Link
+                        href={`/freelancer/${a.freelancer.id}`}
+                        className="inline-flex items-center gap-1 rounded-lg border border-[var(--border,#e2e8f0)] px-3 py-2 text-sm font-medium hover:border-[#6d9c9f]"
+                      >
+                        <Eye className="h-4 w-4" />
+                        Preview profile
+                      </Link>
+                      <Link
                         href={`/business/applications/${a.gig.id}`}
                         className="inline-flex items-center gap-1 rounded-lg border border-[var(--border,#e2e8f0)] px-3 py-2 text-sm font-medium hover:border-[#6d9c9f]"
                       >
