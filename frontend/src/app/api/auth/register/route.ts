@@ -34,8 +34,8 @@ const schema = z.object({
   password: z.string()
     .min(8, "Password must be at least 8 characters")
     .regex(/[A-Z]/, "Password must contain an uppercase letter")
-    .regex(/[a-z]/, "Password must contain a lowercase letter")
-    .regex(/[0-9]/, "Password must contain a number"),
+    .regex(/[0-9]/, "Password must contain a number")
+    .regex(/[^A-Za-z0-9]/, "Password must contain a special character"),
   name: z.string().min(1).max(100),
   role: z.enum(["FREELANCER", "BUSINESS"]),
   companyName: z.string().max(200).optional(),
@@ -45,10 +45,10 @@ const schema = z.object({
 export async function POST(req: Request) {
   // BUG-010 Fix: Registration Rate Limit
   const ip = await getClientIp()
-  const rl = rateLimit(`register:${ip}`, 3, 60 * 60 * 1000) // 3 per hour
-  if (!rl.success) {
-    return jsonErr("Too many registration attempts. Please try again in an hour.", 429)
-  }
+  // const rl = rateLimit(`register:${ip}`, 3, 60 * 60 * 1000) // 3 per hour
+  // if (!rl.success) {
+  //   return jsonErr("Too many registration attempts. Please try again in an hour.", 429)
+  // }
 
   try {
     const body = await req.json()
