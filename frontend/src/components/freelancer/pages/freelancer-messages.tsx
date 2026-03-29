@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useSearchParams } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { format, isToday, isYesterday, isSameDay } from "date-fns"
 import Image from "next/image"
@@ -33,6 +34,7 @@ type Peer = { id: string; name: string; image: string | null }
 type ConversationItem = {
   id: string
   contractId: string
+  gigId: string
   gigTitle: string
   contractStatus: string
   peer: Peer
@@ -95,6 +97,7 @@ const CLOUDINARY_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "m
 
 export function FreelancerMessages() {
   const { data: session } = useSession()
+  const searchParams = useSearchParams()
   const qc = useQueryClient()
   const { socket, connected } = useSocket()
   const userId = session?.user?.id
@@ -102,6 +105,9 @@ export function FreelancerMessages() {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [showMobile, setShowMobile] = useState(false)
+  const requestedConversationId = searchParams.get("conversationId")
+  const requestedFreelancerId = searchParams.get("freelancerId")
+  const requestedGigId = searchParams.get("gigId")
 
   /* ── Conversations List ── */
   const convQuery = useQuery<ConversationItem[]>({
@@ -125,10 +131,30 @@ export function FreelancerMessages() {
 
   // Auto-select first conversation
   useEffect(() => {
+    if (requestedConversationId) {
+      const requested = conversations.find((c) => c.id === requestedConversationId)
+      if (requested && activeId !== requested.id) {
+        setActiveId(requested.id)
+        return
+      }
+    }
+
+    if (requestedFreelancerId) {
+      const requested = conversations.find(
+        (c) =>
+          c.peer.id === requestedFreelancerId &&
+          (!requestedGigId || c.gigId === requestedGigId)
+      )
+      if (requested && activeId !== requested.id) {
+        setActiveId(requested.id)
+        return
+      }
+    }
+
     if (!activeId && conversations.length > 0) {
       setActiveId(conversations[0]!.id)
     }
-  }, [activeId, conversations])
+  }, [activeId, conversations, requestedConversationId, requestedFreelancerId, requestedGigId])
 
   const active = conversations.find((c) => c.id === activeId)
 

@@ -1,11 +1,12 @@
 "use client"
 
-import { ApprovalStatus } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { format } from "date-fns"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useState } from "react"
 import { toast } from "sonner"
+
+type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED" | "SUSPENDED"
 
 type Row = {
   id: string
@@ -22,7 +23,8 @@ const TABS = ["ALL", "PENDING", "APPROVED", "REJECTED", "SUSPENDED"] as const
 type Tab = (typeof TABS)[number]
 
 function tabFromSearch(status: string | null): Tab {
-  if (status && TABS.includes(status as Tab) && status !== "ALL") return status as Tab
+  const normalized = (status ?? "").toUpperCase()
+  if (normalized && TABS.includes(normalized as Tab) && normalized !== "ALL") return normalized as Tab
   return "ALL"
 }
 
@@ -117,7 +119,19 @@ function BusinessesInner() {
             {q.isLoading ? (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
-                  Loading…
+                  Loading...
+                </td>
+              </tr>
+            ) : q.isError ? (
+              <tr>
+                <td colSpan={6} className="px-4 py-8 text-center text-red-300">
+                  {(q.error as Error).message || "Failed to load businesses"}
+                </td>
+              </tr>
+            ) : rows.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
+                  No businesses found for {tab.toLowerCase()} status.
                 </td>
               </tr>
             ) : (
@@ -138,7 +152,7 @@ function BusinessesInner() {
                   <td className="px-4 py-3">{r._count.gigs}</td>
                   <td className="px-4 py-3">{r._count.contractsAsBusiness}</td>
                   <td className="px-4 py-3">
-                    {r.approvalStatus === ApprovalStatus.PENDING && (
+                    {r.approvalStatus === "PENDING" && (
                       <div className="flex gap-2">
                         <button
                           type="button"
@@ -201,7 +215,7 @@ function BusinessesInner() {
 
 export default function WorkspaceAdminBusinessesPage() {
   return (
-    <Suspense fallback={<div className="text-slate-400">Loading…</div>}>
+    <Suspense fallback={<div className="text-slate-400">Loading...</div>}>
       <BusinessesInner />
     </Suspense>
   )

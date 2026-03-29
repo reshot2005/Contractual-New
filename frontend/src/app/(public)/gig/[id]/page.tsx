@@ -36,6 +36,8 @@ export default async function GigPage({ params }: { params: Promise<{ id: string
   // Map to the view component's expected format (if different)
   // Our GigDetailView needs a rich data set (MockGigDetail structure).
   const price = gig.budgetAmount || 500
+  const minBudget = gig.minBudget
+  const maxBudget = gig.maxBudget
   
   // Basic SEO-friendly slug
   const categorySlug = gig.category.toLowerCase().replace(/\s+/g, "-").replace("&", "and")
@@ -52,6 +54,9 @@ export default async function GigPage({ params }: { params: Promise<{ id: string
 
   const mappedGig = {
     ...gig,
+    price,
+    minBudget,
+    maxBudget,
     businessName: gig.business.companyName || gig.business.name,
     businessImage: gig.business.image,
     applicantCount: gig._count.applications,
@@ -118,7 +123,7 @@ export default async function GigPage({ params }: { params: Promise<{ id: string
       stats: [
         { label: "Gigs Posted", value: "12" },
         { label: "Hire Rate", value: "92%" },
-        { label: "Avg Budget", value: `₹${price}` },
+        { label: "Avg Budget", value: minBudget && maxBudget ? `₹${minBudget.toLocaleString("en-IN")}-${maxBudget.toLocaleString("en-IN")}` : `₹${price.toLocaleString("en-IN")}` },
         { label: "Location", value: gig.business.location || "Online" },
       ]
     },

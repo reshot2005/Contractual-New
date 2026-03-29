@@ -9,6 +9,31 @@ export async function GET() {
 
     const userId = session.user.id
 
+    // Backfill missing conversation rows for accepted/active legacy contracts.
+    const missingConversationContracts = await prisma.contract.findMany({
+      where: {
+        OR: [{ freelancerId: userId }, { businessId: userId }],
+        conversation: null,
+      },
+      select: {
+        id: true,
+        freelancerId: true,
+        businessId: true,
+      },
+      take: 200,
+    })
+
+    if (missingConversationContracts.length > 0) {
+      await prisma.conversation.createMany({
+        data: missingConversationContracts.map((c) => ({
+          contractId: c.id,
+          freelancerId: c.freelancerId,
+          businessId: c.businessId,
+        })),
+        skipDuplicates: true,
+      })
+    }
+
     const conversations = await prisma.conversation.findMany({
       where: {
         OR: [{ freelancerId: userId }, { businessId: userId }],
@@ -19,7 +44,7 @@ export async function GET() {
           select: {
             id: true,
             status: true,
-            gig: { select: { title: true } },
+            gig: { select: { id: true, title: true } },
           },
         },
         freelancer: {
@@ -84,6 +109,7 @@ export async function GET() {
       return {
         id: conv.id,
         contractId: conv.contractId,
+        gigId: conv.contract.gig.id,
         gigTitle: conv.contract.gig.title,
         contractStatus: conv.contract.status,
         peer,

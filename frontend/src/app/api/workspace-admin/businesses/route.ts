@@ -6,7 +6,14 @@ import { prisma } from "@/lib/prisma"
 import { requireWorkspaceAdmin } from "@/lib/workspace-admin/require-admin-api"
 
 const qSchema = z.object({
-  status: z.nativeEnum(ApprovalStatus).optional(),
+  status: z
+    .string()
+    .optional()
+    .transform((value) => (value ? value.toUpperCase() : undefined))
+    .refine((value) => !value || Object.values(ApprovalStatus).includes(value as ApprovalStatus), {
+      message: "Invalid status",
+    })
+    .transform((value) => value as ApprovalStatus | undefined),
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(20),
 })

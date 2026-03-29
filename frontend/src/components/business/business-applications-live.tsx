@@ -22,7 +22,7 @@ import {
 } from "lucide-react"
 import type { BusinessApplicationRow } from "@/lib/business-application-types"
 import { qk } from "@/lib/realtime/query-keys"
-import { formatCurrency } from "@/lib/currency"
+import { formatGigBudgetRange } from "@/lib/currency"
 
 async function fetchApplications(): Promise<BusinessApplicationRow[]> {
   const res = await fetch("/api/business/applications")
@@ -167,10 +167,12 @@ export function BusinessApplicationsLive() {
             .slice(0, 2)
             .toUpperCase()
           const su = STATUS_UI[a.status]
-          const rate =
-            a.proposedPrice != null
-              ? `${formatCurrency(a.proposedPrice)}`
-              : "—"
+          const rate = formatGigBudgetRange({
+            budgetAmount: a.gig.budgetAmount,
+            minBudget: a.gig.minBudget,
+            maxBudget: a.gig.maxBudget,
+            budgetType: a.gig.budgetType,
+          })
           const duration =
             a.deliveryDays != null ? `${a.deliveryDays} days` : "—"
 
@@ -244,7 +246,7 @@ export function BusinessApplicationsLive() {
                   </div>
                   <div className="flex flex-col items-end gap-2 shrink-0">
                     <div className="text-right">
-                      <p className="text-xs text-[var(--text-secondary,#64748b)]">Proposed</p>
+                      <p className="text-xs text-[var(--text-secondary,#64748b)]">Gig budget range</p>
                       <p className="text-xl font-bold text-[#6d9c9f]">{rate}</p>
                       <p className="mt-1 flex items-center justify-end gap-1 text-xs text-[var(--text-secondary,#64748b)]">
                         <Clock className="h-3 w-3" />
@@ -260,7 +262,9 @@ export function BusinessApplicationsLive() {
                         Gig applicants
                       </Link>
                       <Link
-                        href={`/business/messages`}
+                        href={`/business/messages?freelancerId=${encodeURIComponent(
+                          a.freelancer.id
+                        )}&gigId=${encodeURIComponent(a.gig.id)}`}
                         className="inline-flex items-center gap-1 rounded-lg bg-[#6d9c9f] px-3 py-2 text-sm font-medium text-white hover:bg-[#5a8a8d]"
                       >
                         <MessageSquare className="h-4 w-4" />

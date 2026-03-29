@@ -66,14 +66,66 @@ export async function POST(req: Request) {
     }
     const { email, password, name, role, companyName, onboardingData } = parsed.data
     
-    // BUG-011 Fix: Avoid informing attacker if email exists (Generic Response)
-    const existing = await prisma.user.findUnique({ where: { email } })
+    const isBusiness = role === "BUSINESS"
+
+    const existing = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        approvalStatus: true,
+      },
+    })
     if (existing) {
-      // Return 200 with generic "check email" or duplicate error but generic message
+      // Idempotent business registration:
+      // if an unapproved business retries registration, keep/restore PENDING instead of failing silently.
+      if (isBusiness && existing.role === Role.BUSINESS) {
+        const updated = await prisma.user.update({
+          where: { id: existing.id },
+          data: {
+            name,
+            companyName: companyName ?? undefined,
+            companyDesc: onboardingData?.companyDesc ?? undefined,
+            industry: onboardingData?.industry ?? undefined,
+            companySize: onboardingData?.companySize ?? undefined,
+            website: onboardingData?.website ?? undefined,
+            location: onboardingData?.location ?? undefined,
+            phone: onboardingData?.phone ?? undefined,
+            approvalStatus: ApprovalStatus.PENDING,
+            rejectionReason: null,
+            adminNotes: null,
+            approvedAt: null,
+            approvedBy: null,
+          },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            createdAt: true,
+            approvalStatus: true,
+          },
+        })
+
+        await logPlatformActivity({
+          type: "BUSINESS_REGISTRATION_RESUBMITTED",
+          userId: updated.id,
+          message: `Business registration resubmitted: ${updated.name} <${updated.email}>`,
+        })
+
+        return jsonOk({
+          ...updated,
+          pendingApproval: true,
+          existingAccount: true,
+        })
+      }
+
+      // Keep a generic response for other duplicate-email cases.
       return jsonErr("If this email is available, an account will be created. Please check your inbox.", 409)
     }
     const passwordHash = await bcrypt.hash(password, 12)
-    const isBusiness = role === "BUSINESS"
     
     // Base user data
     const userData: any = {

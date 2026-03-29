@@ -18,7 +18,16 @@ export async function GET() {
     orderBy: { createdAt: "desc" },
     take: 200,
     include: {
-      gig: { select: { id: true, title: true } },
+      gig: {
+        select: {
+          id: true,
+          title: true,
+          budgetType: true,
+          budgetAmount: true,
+          minBudget: true,
+          maxBudget: true,
+        },
+      },
       freelancer: {
         select: {
           id: true,

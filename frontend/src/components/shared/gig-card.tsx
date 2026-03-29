@@ -162,13 +162,13 @@ export function GigCard({
           <span className="text-xs text-[var(--text-secondary)]">
             {minBudget ? "Budget Range" : "Starting at"}
           </span>
-          {minBudget && maxBudget ? (
+          {(minBudget && maxBudget && minBudget !== maxBudget) ? (
             <p className="text-base font-bold font-mono text-[var(--primary)] whitespace-nowrap">
               ₹{minBudget.toLocaleString("en-IN")} - ₹{maxBudget.toLocaleString("en-IN")}
             </p>
           ) : (
             <p className="text-lg font-bold font-mono text-[var(--primary)] whitespace-nowrap">
-              ₹{price.toLocaleString("en-IN")}
+              ₹{(minBudget || price || 500).toLocaleString("en-IN")}
             </p>
           )}
         </div>

@@ -42,9 +42,9 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ applicationId
       })
 
       if (status === "ACCEPTED" && application.status !== "ACCEPTED") {
-        const existing = await tx.contract.findUnique({ where: { applicationId } })
-        if (!existing) {
-          await tx.contract.create({
+        let contract = await tx.contract.findUnique({ where: { applicationId } })
+        if (!contract) {
+          contract = await tx.contract.create({
             data: {
               agreedPrice: application.proposedPrice ?? application.gig.budgetAmount,
               applicationId: application.id,
@@ -56,6 +56,17 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ applicationId
             }
           })
         }
+
+        // Ensure accepted applications always have a conversation thread.
+        await tx.conversation.upsert({
+          where: { contractId: contract.id },
+          update: {},
+          create: {
+            contractId: contract.id,
+            freelancerId: application.freelancerId,
+            businessId: application.gig.businessId,
+          },
+        })
       }
       return updated
     })

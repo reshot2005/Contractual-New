@@ -26,6 +26,8 @@ type GigRow = {
   id: string
   title: string
   budgetAmount: number
+  minBudget: number | null
+  maxBudget: number | null
   currency: string
   deadline: Date | null
   business: Pick<User, "id" | "name" | "image" | "isVerified"> & {
@@ -267,7 +269,9 @@ export function FreelancerBrowseGigs() {
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#94a3b8]">Budget</p>
                     <p className="mt-1 font-mono text-[22px] font-extrabold text-[#22c55e]">
-                      ₹{card.budgetAmount.toLocaleString("en-IN")}
+                      {card.minBudget && card.maxBudget && card.minBudget !== card.maxBudget 
+                        ? `₹${card.minBudget.toLocaleString("en-IN")} - ₹${card.maxBudget.toLocaleString("en-IN")}`
+                        : `₹${(card.minBudget || card.budgetAmount || 500).toLocaleString("en-IN")}`}
                     </p>
                   </div>
                   <div>

@@ -33,7 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-import { formatCurrency } from "@/lib/currency"
+import { formatCurrency, formatGigBudgetRange } from "@/lib/currency"
 
 const TEXT = "#0f172a"
 const MUTED = "#64748b"
@@ -244,11 +244,12 @@ function ApplicantCard({
   const f = a.freelancer
   const initials = f.name.split(/\s+/).map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()
   
-  const gigRange = gig?.minBudget != null && gig?.maxBudget != null && gig.minBudget !== gig.maxBudget
-    ? `₹${gig.minBudget.toLocaleString("en-IN")} - ₹${gig.maxBudget.toLocaleString("en-IN")}${gig.budgetType === "HOURLY" ? "/hr" : ""}`
-    : null;
-
-  const rate = gigRange || (a.proposedPrice != null ? formatCurrency(a.proposedPrice) : "—")
+  const rate = formatGigBudgetRange({
+    budgetAmount: gig?.budgetAmount,
+    minBudget: gig?.minBudget,
+    maxBudget: gig?.maxBudget,
+    budgetType: gig?.budgetType,
+  })
   const duration = a.deliveryDays != null ? `${a.deliveryDays} days` : "—"
 
   return (
@@ -320,7 +321,7 @@ function ApplicantCard({
         {/* Right Sidebar */}
         <div className="mt-6 flex flex-col gap-5 xl:mt-0 xl:w-64 xl:shrink-0 xl:border-l xl:border-gray-100 xl:pl-6">
           <div className="rounded-xl bg-gray-50 p-4 border border-gray-100">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Proposed Rate</p>
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Gig Budget Range</p>
             <p className="text-2xl font-black text-[#6d9c9f] mt-1">{rate}</p>
             <div className="mt-2 flex items-center justify-between text-sm text-gray-500 pb-2 border-b border-gray-200">
               <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> Duration:</span>
