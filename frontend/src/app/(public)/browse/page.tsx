@@ -100,7 +100,7 @@ export default function BrowsePage() {
             <span className="text-[var(--text-primary)]">Browse Gigs</span>
           </nav>
 
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row lg:items-start gap-6 xl:gap-8">
             <div className="hidden lg:block">
               <FilterSidebar
                 onFilterChange={(f) => {
@@ -162,8 +162,8 @@ export default function BrowsePage() {
               </div>
             )}
 
-            <div className="flex-1">
-              <div className="bg-white rounded-xl border border-[var(--border)] p-4 mb-6">
+            <div className="min-w-0 flex-1">
+              <div className="mb-6 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-[0_6px_18px_rgba(15,23,42,0.04)]">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <p className="text-[var(--text-primary)]">
                     <span className="font-semibold font-mono">{gigs.length}</span> gigs found
@@ -250,16 +250,16 @@ export default function BrowsePage() {
 
               <div
                 className={cn(
-                  "grid gap-5",
+                  "grid items-stretch gap-6",
                   viewMode === "grid"
-                    ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
+                    ? "grid-cols-1 md:grid-cols-2 2xl:grid-cols-3"
                     : "grid-cols-1"
                 )}
               >
                 {loading && (
                   <>
                     {Array.from({ length: 6 }).map((_, i) => (
-                      <div key={`loading-${i}`} className="w-full min-w-[280px] max-w-[320px] h-[360px] rounded-[14px] border border-[var(--border)] bg-white animate-pulse" />
+                      <div key={`loading-${i}`} className="h-[392px] w-full rounded-[18px] border border-[var(--border)] bg-white animate-pulse" />
                     ))}
                   </>
                 )}
