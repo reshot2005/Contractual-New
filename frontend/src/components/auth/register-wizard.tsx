@@ -415,7 +415,12 @@ export function FreelancerRegisterWizard() {
                       </div>
                       <UploadButton
                         endpoint="avatars"
-                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        className="absolute inset-0 z-20 ut-button:w-full ut-button:h-full ut-button:bg-transparent ut-allowed-content:hidden"
+                        appearance={{
+                          button: "w-full h-full bg-transparent border-none text-transparent",
+                          container: "w-full h-full",
+                          allowedContent: "hidden"
+                        }}
                         onClientUploadComplete={(res) => {
                           if (res?.[0]) setValue("image", res[0].url)
                         }}
@@ -760,7 +765,12 @@ export function FreelancerRegisterWizard() {
                         <span className="text-[11px] font-black text-teal-600 uppercase">Add Work</span>
                         <UploadButton 
                           endpoint="portfolioFiles"
-                          className="absolute inset-0 opacity-0 cursor-pointer"
+                          className="absolute inset-0 z-20 ut-button:w-full ut-button:h-full ut-button:bg-transparent ut-allowed-content:hidden"
+                          appearance={{
+                            button: "w-full h-full bg-transparent border-none text-transparent",
+                            container: "w-full h-full",
+                            allowedContent: "hidden"
+                          }}
                           onClientUploadComplete={(res) => {
                             if (res?.[0]) setValue("portfolio", [...watchedPortfolio, { title: "", imageUrl: res[0].url }])
                           }}

@@ -82,6 +82,13 @@ export function Navbar() {
               Post a Gig
             </Link>
 
+            <Link href="/auth/signin" className={cn(
+              "text-sm font-semibold transition-opacity hover:opacity-80",
+              scrolled ? "text-[var(--text-primary)]" : "text-white"
+            )}>
+              Sign In
+            </Link>
+
             <Link href="/auth/register">
               <button
                 type="button"
@@ -127,17 +134,16 @@ export function Navbar() {
             </button>
           </div>
 
-          <div className="flex flex-col gap-2 pt-2 border-t border-[var(--border)]">
-            <Link href="/business/post-gig" className="text-[var(--primary)] font-medium py-2">
-              Post a Gig
-            </Link>
-
-            <Link href="/auth/register">
-              <button className="w-full px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-[var(--cta-amber)] to-[var(--cta-amber-dark)]">
-                Join Free
-              </button>
-            </Link>
-          </div>
+            <div className="flex items-center gap-4 pt-2 border-t border-[var(--border)]">
+              <Link href="/auth/signin" className="flex-1 text-center text-sm font-bold text-[var(--text-primary)] py-3 border border-[var(--border)] rounded-lg">
+                Sign In
+              </Link>
+              <Link href="/auth/register" className="flex-1">
+                <button className="w-full px-5 py-3 rounded-lg text-sm font-bold text-white bg-gradient-to-r from-[var(--cta-amber)] to-[var(--cta-amber-dark)]">
+                  Join Free
+                </button>
+              </Link>
+            </div>
         </div>
       </div>
     </header>

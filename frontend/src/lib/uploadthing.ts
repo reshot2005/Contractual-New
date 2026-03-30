@@ -27,13 +27,11 @@ export const uploadRouter = {
   avatars: f({
     image: { maxFileSize: "4MB", maxFileCount: 1 },
   })
-    .middleware(async () => await getSessionOrThrow())
     .onUploadComplete(() => {}),
 
   portfolioFiles: f({
     image: { maxFileSize: "8MB", maxFileCount: 12 },
   })
-    .middleware(async () => await getSessionOrThrow())
     .onUploadComplete(() => {}),
 
   gigBanner: f({

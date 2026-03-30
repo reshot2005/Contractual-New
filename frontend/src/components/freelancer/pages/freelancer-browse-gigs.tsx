@@ -375,8 +375,10 @@ export function FreelancerBrowseGigs() {
 
       <Dialog open={!!applyGig} onOpenChange={(o) => !o && setApplyGig(null)}>
         <DialogContent className="apply-gig-dialog w-[min(92vw,34rem)] max-w-lg overflow-x-hidden">
-          <DialogHeader>
-            <DialogTitle>Apply — {applyGig?.title}</DialogTitle>
+          <DialogHeader className="pr-8 text-left">
+            <DialogTitle className="leading-tight break-words">
+              Apply — {applyGig?.title}
+            </DialogTitle>
           </DialogHeader>
           <div className="min-w-0 space-y-3">
             <div className="min-w-0">

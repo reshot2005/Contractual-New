@@ -8,7 +8,7 @@ const footerLinks = {
       { label: "Post a Gig", href: "/business/post-gig" },
       { label: "Browse Talent", href: "/browse" },
       { label: "How It Works", href: "/#how-it-works" },
-      { label: "Pricing", href: "/pricing" },
+      { label: "", href: "/pricing" },
     ],
   },
   forFreelancers: {
@@ -16,7 +16,7 @@ const footerLinks = {
     links: [
       { label: "Find Gigs", href: "/browse" },
       { label: "Create Profile", href: "/auth/register" },
-      { label: "Success Stories", href: "/success-stories" },
+      { label: "", href: "/success-stories" },
       { label: "Resources", href: "/resources" },
     ],
   },

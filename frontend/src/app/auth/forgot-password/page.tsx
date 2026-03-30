@@ -303,9 +303,8 @@ export default function ForgotPasswordPage() {
           </form>
 
           <div
-            className={`space-y-3 overflow-hidden border-t border-white/10 pt-4 transition-all duration-300 ${
-              emailSubmitted ? "max-h-[320px] opacity-100" : "max-h-0 opacity-0"
-            }`}
+            className={`space-y-3 overflow-hidden border-t border-white/10 pt-4 transition-all duration-300 ${emailSubmitted ? "max-h-[320px] opacity-100" : "max-h-0 opacity-0"
+              }`}
           >
             <p className="text-xs font-black uppercase tracking-widest text-white/40">Enter 6-digit code</p>
             <div className="flex items-center justify-between gap-2">
@@ -329,7 +328,7 @@ export default function ForgotPasswordPage() {
             {isOtpLoading ? (
               <p className="text-sm text-blue-300">Verifying code...</p>
             ) : otpVerified ? (
-              <p className="text-sm text-emerald-300">Code verified. Set your new password.</p>
+              <p className="text-sm text-emerald-300">Success. Set your new password.</p>
             ) : null}
             {otpError ? <p className="text-sm text-red-300">{otpError}</p> : null}
             <Button
@@ -348,9 +347,8 @@ export default function ForgotPasswordPage() {
           </div>
 
           <div
-            className={`space-y-3 overflow-hidden border-t border-white/10 pt-4 transition-all duration-300 ${
-              otpVerified ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
-            }`}
+            className={`space-y-3 overflow-hidden border-t border-white/10 pt-4 transition-all duration-300 ${otpVerified ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+              }`}
           >
             <form onSubmit={handleResetPassword} className="space-y-3">
               <p className="text-xs font-black uppercase tracking-widest text-white/40">Create new password</p>

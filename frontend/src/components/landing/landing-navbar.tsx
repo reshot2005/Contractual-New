@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Search, Menu, X, Zap } from "lucide-react"
+import { Search, Menu, X, Zap, LayoutDashboard } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useSession } from "next-auth/react"
 
 const navLinks = [
   { label: "Explore", href: "/auth/signin" },
@@ -21,6 +22,8 @@ function AppleIcon({ className }: { className?: string }) {
 }
 
 export function LandingNavbar() {
+  const { data: session, status } = useSession()
+  const authenticated = status === "authenticated"
   const [open, setOpen] = useState(false)
 
   return (
@@ -73,12 +76,31 @@ export function LandingNavbar() {
 
 
 
-          <Link
-            href="/auth/register"
-            className="btn-amber-cta hidden !rounded-full !py-2.5 sm:inline-flex"
-          >
-            Start Earning
-          </Link>
+          {!authenticated ? (
+            <>
+              <Link
+                href="/auth/signin"
+                className="hidden text-[15px] font-semibold text-white/90 hover:text-white transition-colors sm:inline-flex mr-2"
+              >
+                Sign In
+              </Link>
+
+              <Link
+                href="/auth/register"
+                className="btn-amber-cta hidden !rounded-full !py-2.5 !px-5 sm:inline-flex"
+              >
+                Start Earning
+              </Link>
+            </>
+          ) : (
+            <Link
+              href={session?.user?.role === "business" ? "/business" : "/freelancer/dashboard"}
+              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white text-sm font-bold border border-white/20 hover:bg-white/20 transition-all"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              Dashboard
+            </Link>
+          )}
 
           <button
             type="button"
@@ -109,11 +131,33 @@ export function LandingNavbar() {
               {link.label}
             </Link>
           ))}
-          <div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-4">
-
-            <Link href="/auth/register" className="btn-amber-cta !block !rounded-full py-3 text-center text-sm">
-              Start Earning
-            </Link>
+          <div className="mt-4 flex items-center gap-3 border-t border-white/10 pt-6 px-3">
+            {!authenticated ? (
+              <>
+                <Link 
+                  href="/auth/signin" 
+                  className="flex-1 py-3 text-center text-sm font-bold text-white border border-white/20 rounded-full hover:bg-white/5 transition-colors"
+                  onClick={() => setOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link 
+                  href="/auth/register" 
+                  className="btn-amber-cta flex-1 !block !rounded-full py-3 text-center text-sm font-bold"
+                  onClick={() => setOpen(false)}
+                >
+                  Start Earning
+                </Link>
+              </>
+            ) : (
+              <Link
+                href={session?.user?.role === "business" ? "/business" : "/freelancer/dashboard"}
+                className="flex-1 py-3 text-center text-sm font-bold text-white bg-[var(--primary)] rounded-full"
+                onClick={() => setOpen(false)}
+              >
+                Go to Dashboard
+              </Link>
+            )}
           </div>
         </div>
       </div>

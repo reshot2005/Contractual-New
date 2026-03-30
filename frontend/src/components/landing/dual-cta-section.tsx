@@ -1,7 +1,11 @@
+"use client"
 import Link from "next/link"
 import { Building2, Briefcase } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 export function DualCtaSection() {
+  const { status } = useSession()
+  const authenticated = status === "authenticated"
   return (
     <section className="w-full">
       <div className="grid md:grid-cols-2">
@@ -16,8 +20,8 @@ export function DualCtaSection() {
           <p className="text-white/80 max-w-[360px] mb-8">
             Post gigs, find skilled freelancers, manage contracts end-to-end.
           </p>
-          <Link
-            href="/business/post-gig"
+           <Link
+            href={authenticated ? "/business" : "/auth/signin?next=/business"}
             className="px-8 py-3.5 rounded-lg text-base font-semibold bg-white text-[var(--primary-dark)] hover:bg-white/90 hover:scale-[1.02] transition-all duration-300"
           >
             Post Your First Gig &rarr;
@@ -36,7 +40,7 @@ export function DualCtaSection() {
             Browse opportunities, submit proposals, build your reputation.
           </p>
           <Link
-            href="/browse"
+            href={authenticated ? "/browse" : "/auth/signin?next=/browse"}
             className="px-8 py-3.5 rounded-lg text-base font-semibold text-white bg-gradient-to-r from-[var(--cta-amber)] to-[var(--cta-amber-dark)] hover:scale-[1.02] hover:shadow-lg hover:shadow-amber-500/30 transition-all duration-300"
           >
             Browse Gigs &rarr;

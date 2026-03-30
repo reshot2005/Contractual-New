@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import { motion, useReducedMotion } from "framer-motion"
 import { Search, Briefcase, Users, TrendingUp, Star, Zap } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -38,9 +39,9 @@ const trendingTags = [
 ]
 
 const opportunities = [
-  { title: "Full-stack Dashboard", price: "₹1,200" },
-  { title: "UI/UX Audit", price: "₹650" },
-  { title: "Technical Writing", price: "₹400" },
+  { title: "Marketing", price: "₹1,200" },
+  { title: "Sales", price: "₹650" },
+  { title: "Business Development", price: "₹400" },
 ]
 
 function floatProps(delay = 0) {
@@ -57,6 +58,8 @@ function floatProps(delay = 0) {
 
 export function HeroSection() {
   const router = useRouter()
+  const { data: session, status } = useSession()
+  const authenticated = status === "authenticated"
   const [q, setQ] = useState("")
   const [mode, setMode] = useState<"talent" | "jobs">("talent")
   const reduceMotion = useReducedMotion()
@@ -72,9 +75,9 @@ export function HeroSection() {
   const motionProps = reduceMotion
     ? {}
     : {
-        animate: { y: [0, -10, 0] },
-        transition: { duration: 5, repeat: Infinity, ease: "easeInOut" as const },
-      }
+      animate: { y: [0, -10, 0] },
+      transition: { duration: 5, repeat: Infinity, ease: "easeInOut" as const },
+    }
 
   return (
     <section className="relative overflow-hidden bg-[var(--dark-surface)] pb-2 pt-[72px] lg:pb-4">
@@ -92,10 +95,10 @@ export function HeroSection() {
             Hire verified talent with contracts, milestones, and escrow-ready workflows.
           </p>
           <Link
-            href="/auth/register"
+            href={authenticated ? (session?.user?.role === "business" ? "/business" : "/freelancer/dashboard") : "/auth/signin"}
             className="btn-amber-cta inline-flex shrink-0 items-center text-sm !py-2 !px-4"
           >
-            Get started
+            {authenticated ? "Go to Dashboard" : "Get started"}
           </Link>
         </motion.div>
 
@@ -128,7 +131,7 @@ export function HeroSection() {
             {/* Copy */}
             <div className="flex max-w-2xl flex-col justify-center space-y-6">
               <div className="inline-flex w-fit rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white/60 backdrop-blur-md">
-                Trusted by teams in 40+ countries
+                Trusted by teams in 8 states
               </div>
               <h1 className="font-display text-4xl leading-[1.08] text-white md:text-6xl lg:text-[4rem] tracking-tight">
                 Connecting businesses to{" "}
@@ -150,7 +153,7 @@ export function HeroSection() {
               >
                 <Users className="h-4 w-4 text-[var(--primary-dark)]" />
                 <span className="text-xs font-semibold text-[var(--text-primary)]">
-                  12,400+ freelancers online
+                  8000+ freelancers online
                 </span>
               </motion.div>
               <motion.div
