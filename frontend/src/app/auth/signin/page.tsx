@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import { toast } from "sonner"
-import { Eye, EyeOff, Shield, Users, TrendingUp, Building2, UserCircle } from "lucide-react"
+import { Eye, EyeOff, Shield, Users, TrendingUp, Building2, UserCircle, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 
@@ -17,6 +17,7 @@ function SignInPageInner() {
   const [password, setPassword] = useState("")
   const [rememberMe, setRememberMe] = useState(false)
   const [accountType, setAccountType] = useState<"business" | "freelancer">("business")
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const r = searchParams.get("role")
@@ -28,20 +29,25 @@ function SignInPageInner() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const callbackUrl = searchParams.get("callbackUrl") ?? undefined
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    })
-    if (res?.error) {
-      toast.error("Invalid email or password")
-      return
+    setIsLoading(true)
+    try {
+      const callbackUrl = searchParams.get("callbackUrl") ?? undefined
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      })
+      if (res?.error) {
+        toast.error("Invalid email or password")
+        return
+      }
+      const me = await fetch("/api/me").then((r) => r.json())
+      const target = callbackUrl && callbackUrl.startsWith("/") ? callbackUrl : me.home
+      router.push(target ?? "/freelancer/dashboard")
+      router.refresh()
+    } finally {
+      setIsLoading(false)
     }
-    const me = await fetch("/api/me").then((r) => r.json())
-    const target = callbackUrl && callbackUrl.startsWith("/") ? callbackUrl : me.home
-    router.push(target ?? "/freelancer/dashboard")
-    router.refresh()
   }
 
   return (
@@ -213,9 +219,22 @@ function SignInPageInner() {
 
             <button
               type="submit"
-              className="w-full py-3.5 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] hover:scale-[1.02] hover:shadow-lg hover:shadow-[var(--shadow-teal)] transition-all duration-300"
+              disabled={isLoading}
+              className={cn(
+                "w-full py-3.5 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] transition-all duration-300 flex items-center justify-center gap-2",
+                isLoading 
+                  ? "opacity-80 cursor-not-allowed" 
+                  : "hover:scale-[1.02] hover:shadow-lg hover:shadow-[var(--shadow-teal)]"
+              )}
             >
-              Sign In
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Signing In...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </form>
 

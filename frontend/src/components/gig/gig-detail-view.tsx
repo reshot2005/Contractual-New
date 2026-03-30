@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import {
   ChevronRight,
@@ -27,7 +28,8 @@ import { Footer } from "@/components/footer"
 import { cn } from "@/lib/utils"
 import type { MockGigDetail } from "@/lib/mock-data"
 
-export function GigDetailView({ gig }: { gig: MockGigDetail }) {
+export function GigDetailView({ gig }: { gig: MockGigDetail & { id?: string } }) {
+  const router = useRouter()
   const [activePackage, setActivePackage] = useState(0)
   const [showAllDescription, setShowAllDescription] = useState(false)
   const [showComparePackages, setShowComparePackages] = useState(false)
@@ -178,7 +180,7 @@ export function GigDetailView({ gig }: { gig: MockGigDetail }) {
                 <div className="flex gap-3 overflow-x-auto custom-scrollbar pb-1">
                   {gallery.map((src, idx) => (
                     <button
-                      key={src}
+                      key={idx}
                       type="button"
                       onClick={() => setActiveThumb(idx)}
                       className={cn(
@@ -461,6 +463,7 @@ export function GigDetailView({ gig }: { gig: MockGigDetail }) {
 
                     <button
                       type="button"
+                      onClick={() => router.push(`/auth/signin?callbackUrl=${encodeURIComponent(`/gig/${gig.id || ""}`)}`)}
                       className="w-full py-4 rounded-lg text-base font-semibold text-white bg-gradient-to-r from-[var(--cta-amber)] to-[var(--cta-amber-dark)] hover:scale-[1.02] hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-300 mb-3 btn-premium"
                     >
                       Apply for This Gig &rarr;
@@ -468,6 +471,7 @@ export function GigDetailView({ gig }: { gig: MockGigDetail }) {
 
                     <button
                       type="button"
+                      onClick={() => router.push(`/auth/signin?callbackUrl=${encodeURIComponent(`/gig/${gig.id || ""}`)}`)}
                       className="w-full py-3 rounded-lg text-base font-semibold text-[var(--primary)] border-2 border-[var(--primary)] hover:bg-[var(--primary-light)] transition-all duration-300 flex items-center justify-center gap-2"
                     >
                       <MessageSquare className="w-5 h-5" />

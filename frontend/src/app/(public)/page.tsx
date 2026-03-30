@@ -7,6 +7,8 @@ import { HowItWorksSection } from "@/components/landing/how-it-works-section"
 import { TrustedBySection } from "@/components/landing/trusted-by-section"
 import { DualCtaSection } from "@/components/landing/dual-cta-section"
 
+export const revalidate = 300
+
 const stats = [
   { value: "8,400+", numericValue: 8400, label: "Businesses" },
   { value: "₹2.8M+", numericValue: 2800000, prefix: "₹", label: "Contracts Closed" },

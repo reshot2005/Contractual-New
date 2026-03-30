@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 
+export const revalidate = 120
+
 export default async function FreelancerPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const p = await prisma.user.findUnique({
@@ -28,7 +30,7 @@ export default async function FreelancerPage({ params }: { params: Promise<{ id:
 
   // Increment profile views
   if (p) {
-    await prisma.user.update({
+    void prisma.user.update({
       where: { id },
       data: { profileViews: { increment: 1 } }
     })
@@ -39,9 +41,21 @@ export default async function FreelancerPage({ params }: { params: Promise<{ id:
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       <section className="bg-white border-b border-gray-100 relative">
-        <div className="h-48 md:h-64 w-full bg-slate-900 border-b-4 border-teal-500 relative overflow-hidden">
-           {p.coverImage && <Image src={p.coverImage} fill alt="Cover" className="object-cover opacity-60 mix-blend-overlay" />}
-           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
+        <div className="h-48 md:h-72 w-full relative overflow-hidden">
+           {p.coverImage ? (
+             <Image 
+               src={p.coverImage} 
+               fill 
+               alt={`${p.name}'s Banner`}
+               className="object-cover transition-transform duration-700 hover:scale-105" 
+               priority 
+               sizes="100vw" 
+             />
+           ) : (
+             <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#2d7a7e] shadow-[inset_0_-80px_60px_-40px_rgba(0,0,0,0.4)]" />
+           )}
+           <div className="absolute inset-0 bg-black/10" />
+           <div className="absolute bottom-0 left-0 w-full h-1.5 bg-teal-500/80 backdrop-blur-sm" />
         </div>
         
         <div className="max-w-6xl mx-auto px-6 lg:px-12 relative z-10 pb-8">

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { assertGigReadable } from "@/lib/contract-access"
 import { prisma } from "@/lib/prisma"
+import { redisDel, redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
 const patchSchema = z.object({
   title: z.string().min(1).optional(),
@@ -27,6 +28,12 @@ const patchSchema = z.object({
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   const session = await auth()
   const { id } = await ctx.params
+  const isPublicViewer = !session?.user?.id
+
+  if (isPublicViewer) {
+    const cached = await redisGetJson<any>(`gig:detail:${id}`)
+    if (cached) return jsonOk(cached)
+  }
 
   const gig = await assertGigReadable(
     id,
@@ -77,7 +84,11 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
     viewerApplication = app
   }
 
-  return jsonOk({ ...fullGig, viewerApplication })
+  const responsePayload = { ...fullGig, viewerApplication }
+  if (isPublicViewer) {
+    await redisSetJson(`gig:detail:${id}`, responsePayload, 120)
+  }
+  return jsonOk(responsePayload)
 }
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
@@ -137,6 +148,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       _count: { select: { applications: true } },
     },
   })
+  await Promise.all([
+    redisSetJson("gigs:cache-version", Date.now(), 86400),
+    redisDel(`gig:detail:${id}`),
+  ])
   return jsonOk(updated)
 }
 
@@ -152,5 +167,9 @@ export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string 
   }
 
   await prisma.gig.delete({ where: { id } })
+  await Promise.all([
+    redisSetJson("gigs:cache-version", Date.now(), 86400),
+    redisDel(`gig:detail:${id}`),
+  ])
   return jsonOk({ id, deleted: true })
 }

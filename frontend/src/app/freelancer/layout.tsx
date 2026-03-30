@@ -6,8 +6,11 @@ import { FreelancerShell } from "@/components/freelancer/freelancer-shell"
 export default async function FreelancerLayout({ children }: { children: ReactNode }) {
   const user = await getCurrentUser()
   
-  // Middleware handles redirection; layout only needs to pass cached user
-  if (!user) return null
+  // If no user is logged in, or the user is not a freelancer (e.g. a business user viewing a profile)
+  // we do NOT want to wrap the content in the freelancer dashboard shell/sidebar.
+  if (!user || user.role !== "FREELANCER") {
+    return <div className="min-h-screen bg-gray-50 flex flex-col">{children}</div>
+  }
 
   return (
     <FreelancerShell

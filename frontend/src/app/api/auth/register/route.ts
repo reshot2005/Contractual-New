@@ -45,10 +45,10 @@ const schema = z.object({
 export async function POST(req: Request) {
   // BUG-010 Fix: Registration Rate Limit
   const ip = await getClientIp()
-  // const rl = rateLimit(`register:${ip}`, 3, 60 * 60 * 1000) // 3 per hour
-  // if (!rl.success) {
-  //   return jsonErr("Too many registration attempts. Please try again in an hour.", 429)
-  // }
+  const rl = rateLimit(`register:${ip}`, 3, 60 * 60 * 1000) // 3 per hour
+  if (!rl.success) {
+    return jsonErr("Too many registration attempts. Please try again in an hour.", 429)
+  }
 
   try {
     const body = await req.json()

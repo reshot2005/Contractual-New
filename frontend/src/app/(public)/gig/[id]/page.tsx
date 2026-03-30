@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma"
 import { GigDetailView } from "@/components/gig/gig-detail-view"
 import { getCategoryGigImage } from "@/lib/category-gig-image"
 
+export const revalidate = 120
+
 /**
  * Optimized for high performance: Fetches real data from PostgreSQL 
  * rather than MOCK IDs, which were causing 404s in production.
@@ -13,10 +15,7 @@ export default async function GigPage({ params }: { params: Promise<{ id: string
   
   if (!id) notFound()
 
-  const session = await auth()
-  if (!session?.user?.id) {
-    redirect(`/auth/signin?callbackUrl=${encodeURIComponent(`/gig/${id}`)}`)
-  }
+  await auth()
 
   const gig = await prisma.gig.findUnique({
     where: { id },
@@ -50,7 +49,40 @@ export default async function GigPage({ params }: { params: Promise<{ id: string
   // Basic SEO-friendly slug
   const categorySlug = gig.category.toLowerCase().replace(/\s+/g, "-").replace("&", "and")
   
-  const mainImage = gig.bannerImage || getCategoryGigImage(gig.category)
+  const mainImage = getCategoryGigImage(gig.category)
+
+  const [reviewsData, reviewCount, ratingAgg, ratingGrouped] = await Promise.all([
+    prisma.review.findMany({
+      where: { revieweeId: gig.business.id },
+      include: {
+        reviewer: {
+          select: { name: true, image: true }
+        }
+      },
+      orderBy: { createdAt: "desc" },
+      take: 10
+    }),
+    prisma.review.count({
+      where: { revieweeId: gig.business.id }
+    }),
+    prisma.review.aggregate({
+      where: { revieweeId: gig.business.id },
+      _avg: { rating: true }
+    }),
+    prisma.review.groupBy({
+      by: ["rating"],
+      where: { revieweeId: gig.business.id },
+      _count: { _all: true },
+    }),
+  ])
+
+  const averageRating = ratingAgg._avg.rating || 0
+
+  const countByStar = new Map(ratingGrouped.map((r) => [r.rating, r._count._all]))
+  const ratingBreakdown = [5, 4, 3, 2, 1].map((star) => ({
+    stars: star,
+    percent: reviewCount > 0 ? Math.round(((countByStar.get(star) ?? 0) / reviewCount) * 100) : 0
+  }))
 
   const mappedGig = {
     ...gig,
@@ -62,8 +94,6 @@ export default async function GigPage({ params }: { params: Promise<{ id: string
     applicantCount: gig._count.applications,
     categorySlug,
     gallery: [
-      mainImage,
-      mainImage,
       mainImage,
     ],
     location: gig.business.location || "Remote",
@@ -128,8 +158,8 @@ export default async function GigPage({ params }: { params: Promise<{ id: string
       memberSince: "2026",
       responseBadge: null,
     },
-    rating: 0,
-    reviewCount: 0,
+    rating: averageRating,
+    reviewCount: reviewCount,
     business: {
       name: gig.business.companyName || gig.business.name,
       tagline: gig.business.industry || "Professional Business",
@@ -141,18 +171,23 @@ export default async function GigPage({ params }: { params: Promise<{ id: string
         { label: "Location", value: gig.business.location || "Online" },
       ]
     },
-    ratingBreakdown: [
-      { stars: 5, percent: 95 },
-      { stars: 4, percent: 5 },
-    ],
-    reviews: [
-      {
-        name: "Alex Johnson",
-        date: "Last month",
-        rating: 5,
-        text: "Great experience working with this client. Clear requirements and fast payment.",
-      }
-    ]
+    ratingBreakdown: ratingBreakdown,
+
+
+
+    reviews: reviewsData.map((r: any) => ({
+      name: r.reviewer?.name || "Anonymous User",
+      date: new Date(r.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }),
+      rating: r.rating,
+      text: r.comment,
+    }))
+
+
+
+
+
+
+
   }
 
   return <GigDetailView gig={mappedGig as any} />

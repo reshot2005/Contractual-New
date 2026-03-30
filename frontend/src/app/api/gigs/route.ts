@@ -6,6 +6,7 @@ import { assertApprovedBusiness } from "@/lib/approval-guards"
 import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
 import { getCached, setCached } from "@/lib/cache"
+import { redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
 /** ISO or any string Date.parse accepts (Zod .datetime() is strict and can reject valid browser ISO). */
 const deadlineField = z
@@ -84,11 +85,14 @@ export async function GET(req: NextRequest) {
   const searchText = f.search ?? f.q
 
   // Simple key for common public views
+  const cacheVersion = (await redisGetJson<number>("gigs:cache-version")) ?? 1
   const cacheKey = session?.user?.id 
     ? null 
-    : `gigs:p${page}:l${limit}:s${f.sort}:c${f.category ?? "all"}:ex${f.experienceLevel ?? "all"}`
+    : `v${cacheVersion}:gigs:p${page}:l${limit}:s${f.sort}:c${f.category ?? "all"}:ex${f.experienceLevel ?? "all"}`
 
   if (cacheKey && !searchText && !f.skills && !f.minBudget && !f.maxBudget && !f.deadline) {
+    const redisCached = await redisGetJson<{ total: number; rows: any[] }>(cacheKey)
+    if (redisCached) return jsonOk(redisCached.rows, { total: redisCached.total, page, limit })
     const cached = getCached<{ total: number, rows: any[] }>(cacheKey)
     if (cached) return jsonOk(cached.rows, { total: cached.total, page, limit })
   }
@@ -199,6 +203,7 @@ export async function GET(req: NextRequest) {
 
   if (cacheKey && !session?.user?.id) {
     setCached(cacheKey, { total, rows }, 60)
+    await redisSetJson(cacheKey, { total, rows }, 60)
   }
 
   return jsonOk(payload, { total, page, limit })
@@ -287,6 +292,7 @@ export async function POST(req: Request) {
           _count: { select: { applications: true } },
         },
       })
+      await redisSetJson("gigs:cache-version", Date.now(), 86400)
       return jsonOk(gig, undefined, 201)
     }
 
@@ -301,6 +307,7 @@ export async function POST(req: Request) {
         _count: { select: { applications: true } },
       },
     })
+    await redisSetJson("gigs:cache-version", Date.now(), 86400)
 
     return jsonOk(gig, undefined, 201)
   } catch (e) {

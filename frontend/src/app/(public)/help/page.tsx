@@ -3,6 +3,8 @@ import { Search, Compass, ShieldCheck, CreditCard, LifeBuoy } from "lucide-react
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
+export const revalidate = 600
+
 export default function HelpPage() {
   const categories = [
     { icon: Compass, label: "Getting Started", count: 12 },

@@ -4,10 +4,15 @@ import { jsonErr, jsonOk } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
 import { requireWorkspaceAdmin } from "@/lib/workspace-admin/require-admin-api"
 import { formatCurrency } from "@/lib/currency"
+import { redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
 export async function GET() {
   const admin = await requireWorkspaceAdmin()
   if (!admin.ok) return jsonErr(admin.error, 401)
+
+  const cacheKey = "workspace-admin:stats:v1"
+  const cached = await redisGetJson<any>(cacheKey)
+  if (cached) return jsonOk(cached)
 
   const now = new Date()
   const dayStart = startOfDay(now)
@@ -66,7 +71,7 @@ export async function GET() {
   const totalRevenue = Math.round(revenueAgg._sum.platformFee ?? 0)
   const monthRev = Math.round(revenueMonth._sum.platformFee ?? 0)
 
-  return jsonOk({
+  const payload = {
     kpis: {
       totalUsers,
       usersToday,
@@ -81,5 +86,8 @@ export async function GET() {
       monthRevenueFormatted: formatCurrency(monthRev),
     },
     pendingBusinesses: pendingList,
-  })
+  }
+
+  await redisSetJson(cacheKey, payload, 30)
+  return jsonOk(payload)
 }

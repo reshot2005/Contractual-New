@@ -49,7 +49,7 @@ export default function BrowsePage() {
           if (!s) continue
           sp.set(k, s)
         }
-        const res = await fetch(`/api/gigs?${sp.toString()}`, { cache: "no-store" })
+        const res = await fetch(`/api/gigs?${sp.toString()}`)
         const json = (await res.json()) as { data?: ApiGig[]; error?: string }
         if (!res.ok) throw new Error(json.error ?? "Failed to load gigs")
         if (!active) return

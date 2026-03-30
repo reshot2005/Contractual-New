@@ -47,11 +47,15 @@ export default auth(async (req) => {
   if (pathname.startsWith("/_next") || pathname.includes(".")) return
   if (pathname.startsWith("/api/workspace-admin")) return
 
-  const isProtected =
-    pathname.startsWith("/freelancer") ||
-    pathname.startsWith("/business") ||
-    pathname.startsWith("/admin") ||
-    pathname.startsWith("/contracts")
+  const isPublicProfile = pathname.startsWith("/freelancer/") && 
+    !["dashboard", "settings", "profile", "messages", "contracts", "earnings", "proposals", "notifications", "active-contracts", "browse-gigs", "my-proposals"].some(p => pathname.startsWith(`/freelancer/${p}`))
+
+  const isFreelancerRoute = pathname.startsWith("/freelancer")
+  const isBusinessRoute = pathname.startsWith("/business")
+  const isAdminRoute = pathname.startsWith("/admin")
+  const isContractRoute = pathname.startsWith("/contracts")
+
+  const isProtected = (isFreelancerRoute && !isPublicProfile) || isBusinessRoute || isAdminRoute || isContractRoute
 
   if (!req.auth && isProtected) {
     const signIn = new URL("/auth/signin", req.nextUrl.origin)
@@ -62,13 +66,13 @@ export default auth(async (req) => {
   const role = req.auth?.user?.role as string | undefined
   if (!role) return
 
-  if (pathname.startsWith("/admin") && role !== "ADMIN") {
+  if (isAdminRoute && role !== "ADMIN") {
     return Response.redirect(new URL(homeForRole(role), req.nextUrl.origin))
   }
-  if (pathname.startsWith("/business") && role !== "BUSINESS") {
+  if (isBusinessRoute && role !== "BUSINESS") {
     return Response.redirect(new URL(homeForRole(role), req.nextUrl.origin))
   }
-  if (pathname.startsWith("/freelancer") && role !== "FREELANCER") {
+  if (isFreelancerRoute && !isPublicProfile && role !== "FREELANCER") {
     return Response.redirect(new URL(homeForRole(role), req.nextUrl.origin))
   }
 })

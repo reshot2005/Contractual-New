@@ -25,6 +25,11 @@ const compress = compression()
 void app.prepare().then(() => {
   const server = createServer((req, res) => {
     try {
+      if ((req.url ?? "").startsWith("/socket.io")) {
+        const parsedUrl = parse(req.url ?? "/", true)
+        void handle(req, res, parsedUrl)
+        return
+      }
       // @ts-ignore
       compress(req, res, () => {
         const parsedUrl = parse(req.url ?? "/", true)

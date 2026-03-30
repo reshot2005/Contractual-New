@@ -832,10 +832,12 @@
     transform: none !important;
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 90vh !important;
+    max-height: 92vh !important;
     overflow-y: auto;
-    border-radius: 16px 16px 0 0 !important;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    border-radius: 24px 24px 0 0 !important;
+    padding: 24px !important;
+    padding-bottom: calc(32px + env(safe-area-inset-bottom)) !important;
+    margin: 0 !important;
   }
 
   [data-slot="dialog-content"]::before {

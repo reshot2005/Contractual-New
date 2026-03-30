@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server"
 import { z } from "zod"
 import { jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
+import { redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
 const querySchema = z.object({
   q: z.string().optional(),
@@ -17,6 +18,15 @@ export async function GET(req: NextRequest) {
   if (!parsed.success) return zodErrorResponse(parsed.error)
 
   const searchText = parsed.data.search ?? parsed.data.q
+  const cacheVersion = (await redisGetJson<number>("gigs:cache-version")) ?? 1
+  const cacheKey = `v${cacheVersion}:gigs:facets:${searchText ?? "all"}`
+  const cached = await redisGetJson<{
+    categories: FacetCount[]
+    experienceLevels: FacetCount[]
+    urgentCount: number
+  }>(cacheKey)
+  if (cached) return jsonOk(cached)
+
   const now = new Date()
 
   const where: Prisma.GigWhereInput = {
@@ -59,10 +69,11 @@ export async function GET(req: NextRequest) {
     .filter((l) => l.name)
     .sort((a, b) => b.count - a.count)
 
-  return jsonOk({
+  const payload = {
     categories: categoryCounts,
     experienceLevels: levelCounts,
     urgentCount,
-  })
+  }
+  await redisSetJson(cacheKey, payload, 60)
+  return jsonOk(payload)
 }
-
