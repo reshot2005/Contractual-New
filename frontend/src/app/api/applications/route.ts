@@ -12,6 +12,7 @@ import { createAndEmitNotification } from "@/lib/notifications"
 import { parsePagination } from "@/lib/pagination"
 import { prisma } from "@/lib/prisma"
 import { SOCKET_EVENTS } from "@/lib/realtime/socket-events"
+import { redisBumpVersion, redisGetJson, redisSetJson } from "@/lib/redis-cache"
 import { emitToUser } from "@/lib/socket-emitter"
 
 const applySchema = z.object({
@@ -74,6 +75,8 @@ export async function POST(req: Request) {
     freelancerId: application.freelancerId,
   })
 
+  await redisBumpVersion(`cache:proposals:freelancer:${session.user.id}:v`)
+
   return jsonOk(application, undefined, 201)
 }
 
@@ -84,6 +87,11 @@ export async function GET(req: NextRequest) {
 
   const { skip, page, limit } = parsePagination(req.nextUrl.searchParams)
   const where = { freelancerId: session.user.id }
+  const cacheVersionKey = `cache:proposals:freelancer:${session.user.id}:v`
+  const cacheVersion = (await redisGetJson<number>(cacheVersionKey)) ?? 1
+  const cacheKey = `proposals:list:${session.user.id}:p${page}:l${limit}:v${cacheVersion}`
+  const cached = await redisGetJson<{ rows: any[]; meta: { total: number; page: number; limit: number } }>(cacheKey)
+  if (cached) return jsonOk(cached.rows, cached.meta)
 
   const [total, rows] = await prisma.$transaction([
     prisma.application.count({ where }),
@@ -104,5 +112,7 @@ export async function GET(req: NextRequest) {
     }),
   ])
 
-  return jsonOk(rows, { total, page, limit })
+  const meta = { total, page, limit }
+  await redisSetJson(cacheKey, { rows, meta }, 30)
+  return jsonOk(rows, meta)
 }

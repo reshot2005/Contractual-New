@@ -10,6 +10,7 @@ import { auth } from "@/lib/auth"
 import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { createAndEmitNotification } from "@/lib/notifications"
 import { prisma } from "@/lib/prisma"
+import { redisBumpVersion } from "@/lib/redis-cache"
 import { SOCKET_EVENTS } from "@/lib/realtime/socket-events"
 import { emitToContractRoom, emitToUsers, emitToUser } from "@/lib/socket-emitter"
 
@@ -44,6 +45,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       where: { id },
       data: { status: ApplicationStatus.WITHDRAWN },
     })
+    await redisBumpVersion(`cache:proposals:freelancer:${session.user.id}:v`)
     return jsonOk(updated)
   }
 
@@ -83,6 +85,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     })
 
     emitToUser(application.freelancerId, SOCKET_EVENTS.APPLICATION_REJECTED, { applicationId: id })
+    await redisBumpVersion(`cache:proposals:freelancer:${application.freelancerId}:v`)
     return jsonOk(updated)
   }
 
@@ -173,6 +176,11 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       contractId: result.contract.id,
       status: result.contract.status,
     })
+    await Promise.all([
+      redisBumpVersion(`cache:proposals:freelancer:${result.app.freelancerId}:v`),
+      redisBumpVersion(`cache:contracts:user:${result.app.freelancerId}:v`),
+      redisBumpVersion(`cache:contracts:user:${result.app.gig.businessId}:v`),
+    ])
 
     return jsonOk({ application: result.app, contract: result.contract })
   }
@@ -197,5 +205,6 @@ export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string 
     where: { id },
     data: { status: ApplicationStatus.WITHDRAWN },
   })
+  await redisBumpVersion(`cache:proposals:freelancer:${session.user.id}:v`)
   return jsonOk(updated)
 }

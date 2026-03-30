@@ -3,6 +3,7 @@ import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
+import { redisBumpVersion, redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
 const patchSchema = z.object({
   name: z.string().min(1).optional(),
@@ -25,6 +26,12 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
   if (!session?.user?.id) return jsonErr("Unauthorized", 401)
   const { id } = await ctx.params
 
+  const cacheVersionKey = `cache:user:profile:${id}:v`
+  const cacheVersion = (await redisGetJson<number>(cacheVersionKey)) ?? 1
+  const cacheKey = `user:profile:${id}:v${cacheVersion}`
+  const cached = await redisGetJson<any>(cacheKey)
+  if (cached) return jsonOk(cached)
+
   const user = await prisma.user.findUnique({
     where: { id },
     include: {
@@ -38,6 +45,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
   if (!user) return jsonErr("Not found", 404)
 
   const { passwordHash: _, ...safe } = user
+  await redisSetJson(cacheKey, safe as any, 5 * 60)
   return jsonOk(safe)
 }
 
@@ -70,6 +78,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       portfolio: true,
     },
   })
+  await redisBumpVersion(`cache:user:profile:${id}:v`)
+  await redisBumpVersion(`cache:freelancer:profile:${id}:v`)
+  await redisBumpVersion(`cache:freelancer:stats:${id}:v`)
+  await redisBumpVersion("cache:freelancers:list:v")
   const { passwordHash: _, ...safe } = user
   return jsonOk(safe)
 }

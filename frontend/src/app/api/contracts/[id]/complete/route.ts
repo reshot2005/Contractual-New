@@ -5,6 +5,7 @@ import { jsonErr, jsonOk } from "@/lib/api-response"
 import { getContractForUser } from "@/lib/contract-access"
 import { createAndEmitNotification } from "@/lib/notifications"
 import { prisma } from "@/lib/prisma"
+import { redisBumpVersion } from "@/lib/redis-cache"
 import { SOCKET_EVENTS } from "@/lib/realtime/socket-events"
 import { emitToContractRoom, emitToUsers } from "@/lib/socket-emitter"
 
@@ -71,6 +72,11 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
     { contractId, status: contract.status }
   )
   emitToContractRoom(contractId, SOCKET_EVENTS.CONTRACT_COMPLETED, { contractId })
+  await Promise.all([
+    redisBumpVersion(`cache:contracts:user:${access.freelancerId}:v`),
+    redisBumpVersion(`cache:contracts:user:${access.businessId}:v`),
+    redisBumpVersion(`cache:freelancer:stats:${access.freelancerId}:v`),
+  ])
 
   return jsonOk(contract)
 }

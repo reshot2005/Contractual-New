@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { redisBumpVersion } from "@/lib/redis-cache"
 
 export async function PATCH(req: Request, context: any) {
   try {
@@ -25,6 +26,11 @@ export async function PATCH(req: Request, context: any) {
            data: { status: "COMPLETED", completedAt: new Date() } 
         })
       ])
+      await Promise.all([
+        redisBumpVersion(`cache:contracts:user:${contract.freelancerId}:v`),
+        redisBumpVersion(`cache:contracts:user:${contract.businessId}:v`),
+        redisBumpVersion(`cache:freelancer:stats:${contract.freelancerId}:v`),
+      ])
       return NextResponse.json({ success: true, status: "COMPLETED" })
     } else if (action === "REJECT") {
        await prisma.$transaction([
@@ -33,6 +39,10 @@ export async function PATCH(req: Request, context: any) {
            where: { id: contractId }, 
            data: { status: "REVISION_REQUESTED", revisionCount: { increment: 1 } } 
         })
+      ])
+      await Promise.all([
+        redisBumpVersion(`cache:contracts:user:${contract.freelancerId}:v`),
+        redisBumpVersion(`cache:contracts:user:${contract.businessId}:v`),
       ])
       return NextResponse.json({ success: true, status: "REVISION_REQUESTED" })
     }

@@ -10,7 +10,7 @@ function homeForRole(role: string | undefined) {
   return "/freelancer/dashboard"
 }
 
-async function workspaceAdminMiddleware(req: NextRequest) {
+async function workspaceAdminProxy(req: NextRequest) {
   const { pathname } = req.nextUrl
   if (!pathname.startsWith("/workspace-admin")) return null
 
@@ -39,7 +39,7 @@ async function workspaceAdminMiddleware(req: NextRequest) {
 }
 
 export default auth(async (req) => {
-  const wa = await workspaceAdminMiddleware(req)
+  const wa = await workspaceAdminProxy(req)
   if (wa) return wa
 
   const { pathname } = req.nextUrl
@@ -47,8 +47,8 @@ export default auth(async (req) => {
   if (pathname.startsWith("/_next") || pathname.includes(".")) return
   if (pathname.startsWith("/api/workspace-admin")) return
 
-  const isPublicProfile = pathname.startsWith("/freelancer/") && 
-    !["dashboard", "settings", "profile", "messages", "contracts", "earnings", "proposals", "notifications", "active-contracts", "browse-gigs", "my-proposals"].some(p => pathname.startsWith(`/freelancer/${p}`))
+  const isPublicProfile = pathname.startsWith("/freelancer/") &&
+    !["dashboard", "settings", "profile", "messages", "contracts", "earnings", "proposals", "notifications", "active-contracts", "browse-gigs", "my-proposals"].some((p) => pathname.startsWith(`/freelancer/${p}`))
 
   const isFreelancerRoute = pathname.startsWith("/freelancer")
   const isBusinessRoute = pathname.startsWith("/business")

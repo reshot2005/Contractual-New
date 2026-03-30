@@ -3,6 +3,7 @@ import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
+import { redisBumpVersion, redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
 const patchSchema = z.object({
   name: z.string().min(1).optional(),
@@ -33,6 +34,12 @@ export async function GET() {
     const session = await auth()
     if (!session?.user?.id) return jsonErr("Unauthorized", 401)
     if (session.user.role !== Role.FREELANCER) return jsonErr("Forbidden", 403)
+
+    const cacheVersionKey = `cache:freelancer:profile:${session.user.id}:v`
+    const cacheVersion = (await redisGetJson<number>(cacheVersionKey)) ?? 1
+    const cacheKey = `freelancer:profile:${session.user.id}:v${cacheVersion}`
+    const cached = await redisGetJson<any>(cacheKey)
+    if (cached) return jsonOk(cached)
 
     // Parallel queries — all fire at the same time
     const [user, completed, active, ratings] = await Promise.all([
@@ -75,13 +82,16 @@ export async function GET() {
 
     const { passwordHash: _p, ...safe } = user
 
-    return jsonOk({
+    const response = {
       ...safe,
       completedContracts: completed,
       activeContracts: active,
       avgRating: ratings._avg.rating,
       reviewCount: ratings._count._all,
-    })
+    }
+    await redisSetJson(cacheKey, response, 5 * 60)
+
+    return jsonOk(response)
   } catch (e: any) {
     console.error("[GET /api/freelancer/profile]", e)
     return jsonErr(e.message || "Internal error", 500)
@@ -128,6 +138,9 @@ export async function PATCH(req: Request) {
         certifications: true,
       },
     })
+    await redisBumpVersion(`cache:freelancer:profile:${session.user.id}:v`)
+    await redisBumpVersion(`cache:freelancer:stats:${session.user.id}:v`)
+    await redisBumpVersion("cache:freelancers:list:v")
 
     const { passwordHash: _pw, ...safe } = user
     return jsonOk(safe)

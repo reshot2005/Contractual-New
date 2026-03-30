@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth"
 import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { parsePagination } from "@/lib/pagination"
 import { prisma } from "@/lib/prisma"
+import { redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
 const querySchema = z.object({
   role: z.nativeEnum(Role).optional(),
@@ -31,6 +32,19 @@ export async function GET(req: NextRequest) {
   if (suspended === "false") where.isSuspended = false
   if (approvalStatus) where.approvalStatus = approvalStatus as any
 
+  const shouldCacheFreelancers = role === Role.FREELANCER
+  const cacheVersion = shouldCacheFreelancers
+    ? (await redisGetJson<number>("cache:freelancers:list:v")) ?? 1
+    : 1
+  const cacheKey = shouldCacheFreelancers
+    ? `freelancers:list:p${page}:l${limit}:s${suspended ?? "all"}:a${approvalStatus ?? "all"}:v${cacheVersion}`
+    : null
+
+  if (cacheKey) {
+    const cached = await redisGetJson<{ rows: any[]; total: number }>(cacheKey)
+    if (cached) return jsonOk(cached.rows, { total: cached.total, page, limit })
+  }
+
   const [total, rows] = await prisma.$transaction([
     prisma.user.count({ where }),
     prisma.user.findMany({
@@ -52,6 +66,10 @@ export async function GET(req: NextRequest) {
       },
     }),
   ])
+
+  if (cacheKey) {
+    await redisSetJson(cacheKey, { rows, total }, 5 * 60)
+  }
 
   return jsonOk(rows, { total, page, limit })
 }

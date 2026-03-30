@@ -5,6 +5,7 @@ import { jsonErr, jsonOk } from "@/lib/api-response"
 import { parsePagination } from "@/lib/pagination"
 import { contractProgressPercent, contractStatusLabel } from "@/lib/contract-progress"
 import { prisma } from "@/lib/prisma"
+import { redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
 export async function GET(req: NextRequest) {
   const session = await auth()
@@ -13,6 +14,11 @@ export async function GET(req: NextRequest) {
 
   const { skip, page, limit } = parsePagination(req.nextUrl.searchParams)
   const tab = req.nextUrl.searchParams.get("tab") ?? "active"
+  const cacheVersionKey = `cache:contracts:user:${session.user.id}:v`
+  const cacheVersion = (await redisGetJson<number>(cacheVersionKey)) ?? 1
+  const cacheKey = `contracts:freelancer:${session.user.id}:tab${tab}:p${page}:l${limit}:v${cacheVersion}`
+  const cached = await redisGetJson<{ rows: any[]; meta: { total: number; page: number; limit: number } }>(cacheKey)
+  if (cached) return jsonOk(cached.rows, cached.meta)
 
   const uid = session.user.id
   let whereStatus: ContractStatus[] | undefined
@@ -77,5 +83,7 @@ export async function GET(req: NextRequest) {
     })),
   }))
 
-  return jsonOk(data, { total, page, limit })
+  const meta = { total, page, limit }
+  await redisSetJson(cacheKey, { rows: data, meta }, 30)
+  return jsonOk(data, meta)
 }

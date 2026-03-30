@@ -2,6 +2,7 @@ import { Role, ApplicationStatus } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import { jsonErr, jsonOk } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
+import { redisBumpVersion } from "@/lib/redis-cache"
 import { assertApprovedBusiness } from "@/lib/approval-guards"
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ applicationId: string }> }) {
@@ -70,6 +71,14 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ applicationId
       }
       return updated
     })
+
+    await redisBumpVersion(`cache:proposals:freelancer:${application.freelancerId}:v`)
+    if (status === "ACCEPTED") {
+      await Promise.all([
+        redisBumpVersion(`cache:contracts:user:${application.freelancerId}:v`),
+        redisBumpVersion(`cache:contracts:user:${application.gig.businessId}:v`),
+      ])
+    }
 
     return jsonOk(result)
   } catch (error: any) {

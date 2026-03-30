@@ -5,6 +5,7 @@ import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { getContractForUser } from "@/lib/contract-access"
 import { createAndEmitNotification } from "@/lib/notifications"
 import { prisma } from "@/lib/prisma"
+import { redisBumpVersion } from "@/lib/redis-cache"
 
 const schema = z.object({
   rating: z.number().int().min(1).max(5),
@@ -62,6 +63,13 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     message: "You received a new review on a completed contract.",
     link: `/freelancer/profile`,
   })
+
+  await Promise.all([
+    redisBumpVersion(`cache:freelancer:reviews:${revieweeId}:v`),
+    redisBumpVersion(`cache:freelancer:stats:${revieweeId}:v`),
+    redisBumpVersion(`cache:contracts:user:${access.freelancerId}:v`),
+    redisBumpVersion(`cache:contracts:user:${access.businessId}:v`),
+  ])
 
   return jsonOk(review, undefined, 201)
 }

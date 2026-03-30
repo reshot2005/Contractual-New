@@ -5,6 +5,7 @@ import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { getContractForUser } from "@/lib/contract-access"
 import { createAndEmitNotification } from "@/lib/notifications"
 import { prisma } from "@/lib/prisma"
+import { redisBumpVersion } from "@/lib/redis-cache"
 import { SOCKET_EVENTS } from "@/lib/realtime/socket-events"
 import { emitToUser } from "@/lib/socket-emitter"
 
@@ -77,6 +78,11 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     })
     emitToUser(a.id, SOCKET_EVENTS.NOTIFICATION_NEW, { disputeId: dispute.id })
   }
+
+  await Promise.all([
+    redisBumpVersion(`cache:contracts:user:${access.freelancerId}:v`),
+    redisBumpVersion(`cache:contracts:user:${access.businessId}:v`),
+  ])
 
   return jsonOk(dispute, undefined, 201)
 }
