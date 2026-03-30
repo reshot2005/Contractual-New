@@ -437,7 +437,7 @@ export function FreelancerRegisterWizard() {
 
                   <div className="grid gap-6">
                     <FloatingInput label="Full Name *" error={errors.name?.message} {...register("name")} />
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <FloatingInput label="Date of Birth *" type="date" error={errors.dob?.message} {...register("dob")} />
                       <div className="relative">
                         <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1 block">Phone Number *</label>
@@ -897,7 +897,10 @@ export function FreelancerRegisterWizard() {
 
 function FloatingInput({ label, error, type = "text", ...props }: any) {
   const [focused, setFocused] = useState(false)
-  const hasVal = props.value || props.defaultValue
+  const [hasValue, setHasValue] = useState(Boolean(props.value || props.defaultValue))
+  const isDateInput = type === "date"
+  const shouldFloat = focused || hasValue || isDateInput
+  const { onChange: onChangeProp, onBlur: onBlurProp, ...restProps } = props
   
   return (
     <div className="relative">
@@ -908,16 +911,28 @@ function FloatingInput({ label, error, type = "text", ...props }: any) {
       )}>
         <label className={cn(
           "absolute left-4 transition-all pointer-events-none uppercase font-black tracking-widest",
-          (focused || hasVal) ? "-top-2 bg-white px-1 text-[9px] text-teal-600" : "top-3.5 text-xs text-gray-400"
+          shouldFloat ? "-top-2 bg-white px-1 text-[9px] text-teal-600" : "top-3.5 text-xs text-gray-400"
         )}>
           {label}
         </label>
         <input 
           type={type}
           onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          className="h-12 w-full bg-transparent px-4 text-sm font-semibold outline-none text-[#0f172a]"
-          {...props}
+          onBlur={(e) => {
+            setFocused(false)
+            setHasValue(Boolean(e.target.value))
+            onBlurProp?.(e)
+          }}
+          onChange={(e) => {
+            setHasValue(Boolean(e.target.value))
+            onChangeProp?.(e)
+          }}
+          className={cn(
+            "h-12 w-full bg-transparent px-4 text-sm font-semibold outline-none text-[#0f172a]",
+            shouldFloat ? "pt-3" : "",
+            isDateInput ? "appearance-none" : ""
+          )}
+          {...restProps}
         />
         {error && <p className="absolute -bottom-5 left-0 text-[10px] font-bold text-red-500 uppercase">{error}</p>}
       </div>

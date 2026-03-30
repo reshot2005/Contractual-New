@@ -374,36 +374,36 @@ export function FreelancerBrowseGigs() {
       </div>
 
       <Dialog open={!!applyGig} onOpenChange={(o) => !o && setApplyGig(null)}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="apply-gig-dialog w-[min(92vw,34rem)] max-w-lg overflow-x-hidden">
           <DialogHeader>
             <DialogTitle>Apply — {applyGig?.title}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-3">
-            <div>
+          <div className="min-w-0 space-y-3">
+            <div className="min-w-0">
               <label className="text-xs font-medium text-[#64748b]">Your bid (₹)</label>
               <Input
                 type="number"
                 value={bid}
                 onChange={(e) => setBid(e.target.value)}
-                className="mt-1"
+                className="mt-1 w-full min-w-0"
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <label className="text-xs font-medium text-[#64748b]">Cover letter (min 100 chars)</label>
               <Textarea
                 value={cover}
                 onChange={(e) => setCover(e.target.value)}
-                className="mt-1 min-h-[140px]"
+                className="mt-1 min-h-[140px] w-full min-w-0 max-w-full resize-none break-words whitespace-pre-wrap overflow-x-hidden"
                 placeholder="Why you&apos;re a great fit…"
               />
               <p className="mt-1 text-right text-xs text-[#94a3b8]">{cover.trim().length} / 100+</p>
             </div>
           </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setApplyGig(null)}>
+          <DialogFooter className="apply-gig-dialog-footer">
+            <Button type="button" variant="outline" onClick={() => setApplyGig(null)} className="w-full sm:w-auto">
               Cancel
             </Button>
-            <Button type="button" disabled={submitting} onClick={() => void onApply()}>
+            <Button type="button" disabled={submitting} onClick={() => void onApply()} className="w-full sm:w-auto">
               {submitting ? "Submitting…" : "Submit Proposal"}
             </Button>
           </DialogFooter>

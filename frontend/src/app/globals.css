@@ -850,6 +850,26 @@
     margin: 0 auto 10px;
   }
 
+  .apply-gig-dialog {
+    left: 50% !important;
+    right: auto !important;
+    width: min(94vw, 34rem) !important;
+    max-width: min(94vw, 34rem) !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+  }
+
+  .apply-gig-dialog-footer {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+  }
+
+  .apply-gig-dialog textarea {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
   .hero-section,
   section {
     overflow-x: clip;
