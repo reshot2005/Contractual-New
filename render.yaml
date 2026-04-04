@@ -6,7 +6,7 @@ services:
     runtime: node
     rootDir: frontend
     buildCommand: npm ci && npm run build
-    startCommand: node --import tsx/esm src/server.ts
+    startCommand: npx tsx src/server.ts
     healthCheckPath: /api/gigs
     envVars:
       - key: NODE_VERSION
