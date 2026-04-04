@@ -6,7 +6,7 @@
     "dev": "tsx src/server.ts",
     "dev:next": "next dev",
     "build": "next build --webpack",
-    "start": "node --import tsx/esm src/server.ts",
+    "start": "npx tsx src/server.ts",
     "lint": "eslint ."
   },
   "dependencies": {

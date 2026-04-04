@@ -1,3 +1,4 @@
+process.env.NEXT_RUNTIME = 'nodejs';
 import "dotenv/config"
 import path from "path"
 import dotenv from "dotenv"
