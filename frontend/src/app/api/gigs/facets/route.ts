@@ -5,6 +5,8 @@ import { jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
 import { redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
+export const dynamic = "force-dynamic"
+
 const querySchema = z.object({
   q: z.string().optional(),
   search: z.string().optional(),

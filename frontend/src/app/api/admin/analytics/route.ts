@@ -4,6 +4,8 @@ import { jsonErr, jsonOk } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
 import { redisGetJson, redisSetJson } from "@/lib/redis-cache"
 
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   const session = await auth()
   if (!session?.user?.id) return jsonErr("Unauthorized", 401)

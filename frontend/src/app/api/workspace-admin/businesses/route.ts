@@ -5,6 +5,8 @@ import { jsonErr, jsonOk, zodErrorResponse } from "@/lib/api-response"
 import { prisma } from "@/lib/prisma"
 import { requireWorkspaceAdmin } from "@/lib/workspace-admin/require-admin-api"
 
+export const dynamic = "force-dynamic"
+
 const qSchema = z.object({
   status: z
     .string()
